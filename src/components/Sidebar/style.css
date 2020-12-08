@@ -1,0 +1,50 @@
+.sidebar {
+	flex-grow: 1;
+}
+.sidebar__header {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	padding: 0.35rem;
+	border-right: 1px solid lightgray;
+}
+.sidebar__headerIcons {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-width: 10vw;
+}
+.sidebar__headerIcons > .MuiIconButton-root {
+	margin-right: 0.5rem;
+}
+
+.sidebar__search {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	background-color: #f6f6f6;
+	height: 2.3rem;
+	padding: 0.8rem;
+}
+.sidebar__searchContainer {
+	display: flex;
+	align-items: center;
+	background-color: white;
+	width: 100%;
+	height: 2rem;
+	border-radius: 1.3rem;
+}
+.sidebar__searchContainer > .MuiSvgIcon-root {
+	color: gray;
+	padding: 0.8rem;
+}
+.sidebar__searchContainer > input {
+	border: none;
+	outline-width: 0;
+	margin-left: 0.8rem;
+}
+.sidebar__rooms {
+	height: calc(100vh - 7.58rem);
+	background-color: white;
+	overflow-y: scroll;
+}
