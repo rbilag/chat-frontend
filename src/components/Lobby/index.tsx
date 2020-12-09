@@ -1,3 +1,4 @@
+import { Button, ButtonGroup } from '@material-ui/core';
 import React, { useState } from 'react';
 import axios from '../../services/Axios';
 import './style.css';
@@ -26,23 +27,32 @@ const Lobby = ({ history }: any) => {
 
 	return (
 		<div className="lobby">
-			<div className="lobby__form">
+			<div className="lobby__content">
 				<form>
-					<button className="lobby__button lobby__button--selected" onClick={() => setisNew(true)} type="button">
-						Create Room
-					</button>
-					<button className="lobby__button" onClick={() => setisNew(false)} type="button">
-						Join Room
-					</button>
+					<ButtonGroup className="lobby__type" color="primary" aria-label="outlined primary button group">
+						<Button onClick={() => setisNew(true)} className={`lobby__button ${isNew && 'lobby__button--selected'}`}>
+							Create Room
+						</Button>
+						<Button onClick={() => setisNew(false)} className={`lobby__button ${!isNew && 'lobby__button--selected'}`}>
+							Join Room
+						</Button>
+					</ButtonGroup>
 
 					<input value={nickname} onChange={(e) => setNickname(e.target.value)} type="text" placeholder="Nickname" />
 					{isNew && (
 						<input value={roomCode} onChange={(e) => setRoomCode(e.target.value)} type="text" placeholder="Room Code" />
 					)}
 
-					<button className="lobby__button lobby__button--submit" onClick={proceed} type="submit">
+					<Button
+						onClick={proceed}
+						type="submit"
+						className="lobby__button lobby__button--submit"
+						variant="contained"
+						color="primary"
+						size="large"
+					>
 						Proceed
-					</button>
+					</Button>
 				</form>
 			</div>
 		</div>

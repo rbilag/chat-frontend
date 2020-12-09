@@ -65,8 +65,8 @@
 	justify-content: space-between;
 	align-items: center;
 	height: 3.5rem;
-	border-top: 1px solid lightgray;
-	background-color: lightgray;
+	border-top: 1px solid #e4e4e4;
+	background-color: #e4e4e4;
 }
 .chat__footer > form {
 	flex: 1;
