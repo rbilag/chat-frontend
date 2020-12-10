@@ -1,14 +1,14 @@
-
 export enum ChatEvent {
-    CONNECT = 'connect',
-    DISCONNECT = 'disconnect',
-    MESSAGE = 'message',
-    SYSTEM = 'system',
+	CONNECT = 'connection',
+	DISCONNECT = 'disconnect',
+	JOIN = 'join',
+	MESSAGE = 'message',
+	SYSTEM = 'system'
 }
 export enum MessageStatus {
-    SENT = 'sent',
-    DELIVERED = 'delivered',
-    SEEN = 'seen',
-    UNSENT = 'unsent',
-    ERROR = 'error',
+	SENT = 'sent',
+	DELIVERED = 'delivered',
+	SEEN = 'seen',
+	UNSENT = 'unsent',
+	ERROR = 'error'
 }
