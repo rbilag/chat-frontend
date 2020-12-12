@@ -8,20 +8,14 @@ const Lobby = ({ history }: any) => {
 	const [ nickname, setNickname ] = useState('');
 	const [ roomCode, setRoomCode ] = useState('');
 
-	const proceed = () => {
-		if (isNew) {
-			// axios.post('/api/v1/rooms/new', { nickname }).then((res) => {
-			//   console.log(res);
-			//   // redirect to room page or show error
-			// });
-		} else {
-			// check if room exists
-			// check if no nickname dup in room
-			// axios.post('/api/v1/rooms/join', { nickname, roomCode }).then((res) => {
-			//   console.log(res);
-			//   // redirect to room page or show error
-			// });
-		}
+	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		e.preventDefault();
+		let { data } = isNew
+			? await axios.post('/api/v1/rooms/new', { nickname })
+			: await axios.post('/api/v1/rooms/join', { nickname, roomCode });
+		console.log(data);
+		sessionStorage.setItem('nickname', nickname);
+		sessionStorage.setItem('room_code', data.data.room.code);
 		history.push('/room');
 	};
 
@@ -39,7 +33,7 @@ const Lobby = ({ history }: any) => {
 					</ButtonGroup>
 
 					<input value={nickname} onChange={(e) => setNickname(e.target.value)} type="text" placeholder="Nickname" />
-					{isNew && (
+					{!isNew && (
 						<input value={roomCode} onChange={(e) => setRoomCode(e.target.value)} type="text" placeholder="Room Code" />
 					)}
 

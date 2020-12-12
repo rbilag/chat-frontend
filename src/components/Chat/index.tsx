@@ -9,8 +9,8 @@ import './style.css';
 import { ChatMessage } from '../../types';
 import { ChatEvent } from '../../constants';
 import { MessageStatus } from '../../constants';
-import io from 'socket.io-client';
 import { ChatContext } from '../../context/ChatContext';
+import axios from '../../services/Axios';
 
 const Chat = () => {
 	const context = useContext(ChatContext);
@@ -31,6 +31,11 @@ const Chat = () => {
 			// context.join({name: , room: })
 			return () => {
 				console.log('Disconnecting Socket Context..');
+				const nickname = sessionStorage.getItem('nickname');
+				const roomCode = sessionStorage.getItem('room_code');
+				axios.post('/api/v1/rooms/leave', { nickname, roomCode }).then((res) => {
+					console.log(res);
+				});
 				context.disconnect();
 			};
 		},
