@@ -6,47 +6,41 @@ import MoodIcon from '@material-ui/icons/Mood';
 import MicIcon from '@material-ui/icons/Mic';
 import React, { useState, useEffect, useContext } from 'react';
 import './style.css';
-import { ChatMessage } from '../../types';
+import { ChatMessage, UserRoom } from '../../types';
 import { ChatEvent } from '../../constants';
 import { MessageStatus } from '../../constants';
 import { ChatContext } from '../../context/ChatContext';
 import axios from '../../services/Axios';
 
-const Chat = () => {
+const Chat = ({ name, room }: UserRoom) => {
 	const context = useContext(ChatContext);
-	const [ messages, setMessages ] = useState([
-		{
-			author: 'System',
-			message: 'Welcome! Type to chatting now..',
-			timestamp: new Date().toISOString(),
-			status: 'sent'
-		}
-	] as ChatMessage[]);
+	const [ messages, setMessages ] = useState([] as any[]);
 	const [ input, setInput ] = useState('');
+
+	console.log(messages);
 
 	useEffect(
 		() => {
 			console.log('Initializing Socket Context..');
 			context.init();
-			// context.join({name: , room: })
+			console.log({ name, room });
+			context.join({ name, room });
 			return () => {
 				console.log('Disconnecting Socket Context..');
-				const nickname = sessionStorage.getItem('nickname');
-				const roomCode = sessionStorage.getItem('room_code');
-				axios.post('/api/v1/rooms/leave', { nickname, roomCode }).then((res) => {
+				axios.post('/api/v1/rooms/leave', { name, room }).then((res) => {
 					console.log(res);
 				});
 				context.disconnect();
 			};
 		},
-		[ context ]
+		[ context, name, room ]
 	);
 
 	useEffect(
 		() => {
 			console.log('ChatMessage Observable..');
 			const observable = context.onMessage();
-			observable.subscribe((message: ChatMessage) => {
+			observable.subscribe((message: any) => {
 				setMessages([ ...messages, message ]);
 			});
 			// TODO cleanup
@@ -61,10 +55,11 @@ const Chat = () => {
 		e.preventDefault();
 		if (input) {
 			const messageDetails: ChatMessage = {
-				author: 'Rose',
-				message: input,
-				timestamp: new Date().toISOString(),
-				status: MessageStatus.SENT
+				userRoom: {
+					name,
+					room
+				},
+				content: input
 			};
 			setInput('');
 
@@ -94,15 +89,14 @@ const Chat = () => {
 				</div>
 			</div>
 			<div className="chat__body">
-				{messages.map(({ author, message, timestamp, status }: ChatMessage, i) => {
-					// TODO temp
-					const received = true;
-
+				{/* TODO status, dateFormat  */}
+				{/* make system msg different color */}
+				{messages.map(({ content, user, createdAt }: any, i) => {
 					return (
-						<p key={i} className={`chat__message ${received && 'chat__message--receiver'}`}>
-							<span className="chat__person">{author}</span>
-							{message}
-							<span className="chat__timestamp">{timestamp}</span>
+						<p key={i} className={`chat__message ${name !== user.username && 'chat__message--receiver'}`}>
+							<span className="chat__person">{user.username}</span>
+							{content}
+							<span className="chat__timestamp">{createdAt}</span>
 						</p>
 					);
 				})}

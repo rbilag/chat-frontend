@@ -27,7 +27,7 @@ export class SocketService {
 		return fromEvent(this.socket, ChatEvent.JOIN);
 	}
 
-	public onMessage(): Observable<ChatMessage> {
+	public onMessage(): Observable<any> {
 		return fromEvent(this.socket, ChatEvent.MESSAGE);
 	}
 

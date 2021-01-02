@@ -13,7 +13,6 @@ const Lobby = ({ history }: any) => {
 		let { data } = isNew
 			? await axios.post('/api/v1/rooms/new', { nickname })
 			: await axios.post('/api/v1/rooms/join', { nickname, roomCode });
-		console.log(data);
 		sessionStorage.setItem('nickname', nickname);
 		sessionStorage.setItem('room_code', data.data.room.code);
 		history.push('/room');
