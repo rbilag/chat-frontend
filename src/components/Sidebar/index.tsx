@@ -7,7 +7,7 @@ import { Avatar, IconButton } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import SidebarMember from '../SidebarMember';
 
-const Sidebar = () => {
+const Sidebar = ({ onNewRoom }: any) => {
 	return (
 		<div className="sidebar">
 			<div className="sidebar__header">
@@ -15,7 +15,7 @@ const Sidebar = () => {
 					<Avatar src="https://i.pravatar.cc/300" />
 				</div>
 				<div className="sidebar__headerIcons">
-					<IconButton>
+					<IconButton onClick={onNewRoom}>
 						<DonutLargeIcon />
 					</IconButton>
 					<IconButton>

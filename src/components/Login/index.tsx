@@ -12,7 +12,7 @@ function Login({ history }: any) {
 		if (username && password) {
 			let { data } = await axios.post('/api/v1/login', { username, password });
 			console.log(data);
-			history.push('/lobby');
+			history.push('/room');
 		}
 	};
 
@@ -35,7 +35,7 @@ function Login({ history }: any) {
 					<Button
 						onClick={proceed}
 						type="submit"
-						className="lobby__button lobby__button--submit"
+						className="login__button login__button--submit"
 						variant="contained"
 						color="primary"
 						size="large"

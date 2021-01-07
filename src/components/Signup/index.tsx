@@ -45,7 +45,7 @@ function SignUp({ history }: any) {
 					<Button
 						onClick={proceed}
 						type="submit"
-						className="lobby__button lobby__button--submit"
+						className="signup__button signup__button--submit"
 						variant="contained"
 						color="primary"
 						size="large"

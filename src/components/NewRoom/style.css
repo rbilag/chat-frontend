@@ -1,0 +1,42 @@
+.newRoom__content > form {
+	display: flex;
+	flex-flow: row wrap;
+	max-width: 40rem;
+}
+.newRoom__content > form > input {
+	border-radius: 2rem;
+	padding: 0.8rem;
+	margin: 0.35rem 0;
+	border: 2px solid #e4e4e4;
+	outline: none;
+	width: 100%;
+}
+.newRoom__type {
+	margin: 0.35rem auto;
+}
+.newRoom__type .newRoom__button {
+	color: #098a90;
+	border: 1px solid rgba(9, 138, 144, 0.5);
+}
+.newRoom__type .newRoom__button:hover {
+	border: 1px solid rgba(9, 138, 144, 1);
+}
+.newRoom__button--selected.MuiButton-outlined {
+	background-color: #098a90;
+}
+.newRoom__button--selected.MuiButton-outlined:hover {
+	background-color: #177a80;
+}
+.newRoom__button--selected span,
+.newRoom__button--selected:hover span {
+	color: #fff;
+}
+.newRoom__button--submit.MuiButton-contained {
+	background-color: #098a90;
+	letter-spacing: 0.1rem;
+	margin: 1.75rem auto 0;
+	padding: 0.75rem 5rem;
+}
+.newRoom__button--submit.MuiButton-contained:hover {
+	background-color: #177a80;
+}

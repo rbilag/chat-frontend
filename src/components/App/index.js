@@ -9,7 +9,7 @@ import Login from '../Login';
 const routes = [
 	{ path: '/signup', component: SignUp },
 	{ path: '/login', component: Login },
-	{ path: '/lobby', component: Lobby },
+	// { path: '/lobby', component: Lobby },
 	{ path: '/room', component: Room },
 	{ path: '/', component: Login }
 ];
