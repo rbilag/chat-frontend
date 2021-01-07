@@ -10,12 +10,14 @@ const Lobby = ({ history }: any) => {
 
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
-		let { data } = isNew
-			? await axios.post('/api/v1/rooms/new', { nickname })
-			: await axios.post('/api/v1/rooms/join', { nickname, roomCode });
-		sessionStorage.setItem('nickname', nickname);
-		sessionStorage.setItem('room_code', data.data.room.code);
-		history.push('/room');
+		if (nickname && (!isNew || (isNew && roomCode))) {
+			let { data } = isNew
+				? await axios.post('/api/v1/rooms/new', { nickname })
+				: await axios.post('/api/v1/rooms/join', { nickname, roomCode });
+			sessionStorage.setItem('nickname', nickname);
+			sessionStorage.setItem('room_code', data.data.room.code);
+			history.push('/room');
+		}
 	};
 
 	return (

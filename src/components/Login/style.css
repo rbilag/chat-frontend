@@ -1,0 +1,25 @@
+.login {
+	height: 100vh;
+	display: flex;
+	place-items: center;
+	justify-content: center;
+	background-image: url('/src/assets/images/chat_bg_v2.jpg');
+}
+.login__area {
+	background-color: #ededed;
+	padding: 3rem;
+	min-height: 15rem;
+}
+.login__area > form {
+	display: flex;
+	flex-flow: row wrap;
+	max-width: 40rem;
+}
+.login__area > form input {
+	border-radius: 2rem;
+	padding: 0.8rem;
+	margin: 0.35rem 0;
+	border: 2px solid #e4e4e4;
+	outline: none;
+	width: 100%;
+}

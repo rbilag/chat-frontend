@@ -7,8 +7,6 @@ import MicIcon from '@material-ui/icons/Mic';
 import React, { useState, useEffect, useContext } from 'react';
 import './style.css';
 import { ChatMessage, UserRoom } from '../../types';
-import { ChatEvent } from '../../constants';
-import { MessageStatus } from '../../constants';
 import { ChatContext } from '../../context/ChatContext';
 import axios from '../../services/Axios';
 
@@ -27,7 +25,7 @@ const Chat = ({ name, room }: UserRoom) => {
 			context.join({ name, room });
 			return () => {
 				console.log('Disconnecting Socket Context..');
-				axios.post('/api/v1/rooms/leave', { name, room }).then((res) => {
+				axios.post('/api/v1/rooms/leave', { nickname: name, roomCode: room }).then((res) => {
 					console.log(res);
 				});
 				context.disconnect();
@@ -73,8 +71,14 @@ const Chat = ({ name, room }: UserRoom) => {
 			<div className="chat__header">
 				<Avatar />
 				<div className="chat__headerInfo">
-					<h3>Room Name</h3>
-					<p> Last seen at...</p>
+					<h3>Room {room}</h3>
+					<p>
+						{messages.length > 0 ? (
+							'Last seen at ' + messages[messages.length - 1].createdAt
+						) : (
+							'No recent activities...'
+						)}
+					</p>
 				</div>
 				<div className="chat__headerIcons">
 					<IconButton>
@@ -90,10 +94,13 @@ const Chat = ({ name, room }: UserRoom) => {
 			</div>
 			<div className="chat__body">
 				{/* TODO status, dateFormat  */}
-				{/* make system msg different color */}
 				{messages.map(({ content, user, createdAt }: any, i) => {
 					return (
-						<p key={i} className={`chat__message ${name !== user.username && 'chat__message--receiver'}`}>
+						<p
+							key={i}
+							className={`chat__message ${name === user.username && 'chat__message--sender'} ${user.username ===
+								'Chatbot' && 'chat__message--bot'}`}
+						>
 							<span className="chat__person">{user.username}</span>
 							{content}
 							<span className="chat__timestamp">{createdAt}</span>

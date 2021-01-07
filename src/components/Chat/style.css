@@ -54,9 +54,12 @@
 	margin-left: 0.8rem;
 }
 
-.chat__message--receiver {
+.chat__message--sender {
 	margin-left: auto;
 	background-color: #dcf8c6;
+}
+.chat__message--bot {
+	background-color: #c6dcf8;
 }
 
 .chat__footer {
