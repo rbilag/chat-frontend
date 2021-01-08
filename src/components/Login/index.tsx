@@ -12,6 +12,7 @@ function Login({ history }: any) {
 		if (username && password) {
 			let { data } = await axios.post('/api/v1/login', { username, password });
 			console.log(data);
+			sessionStorage.setItem('AUTH', data.authorization);
 			history.push('/room');
 		}
 	};

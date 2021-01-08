@@ -9,11 +9,9 @@ import { ChatContext } from './context/ChatContext';
 const chat = new SocketService();
 
 ReactDOM.render(
-	<React.StrictMode>
-		<ChatContext.Provider value={chat}>
-			<App />
-		</ChatContext.Provider>
-	</React.StrictMode>,
+	<ChatContext.Provider value={chat}>
+		<App />
+	</ChatContext.Provider>,
 	document.getElementById('root')
 );
 

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Button, ButtonGroup, Dialog, DialogTitle } from '@material-ui/core';
+import { Button, ButtonGroup, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
 import axios from '../../services/Axios';
 import './style.css';
 
 function NewRoom({ history, onClose, open }: any) {
 	const [ isNew, setisNew ] = useState(true);
 	const [ roomCode, setRoomCode ] = useState('');
+	const AUTH_TOKEN = sessionStorage.getItem('AUTH');
 
 	const handleClose = () => {
 		onClose();
@@ -13,21 +14,37 @@ function NewRoom({ history, onClose, open }: any) {
 
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
-		console.log('PROCEED');
-		// if (!isNew || (isNew && roomCode)) {
-		// 	let { data } = isNew
-		// 		? await axios.post('/api/v1/rooms/new', { nickname })
-		// 		: await axios.post('/api/v1/rooms/join', { nickname, roomCode });
-		// 	sessionStorage.setItem('nickname', nickname);
-		// 	sessionStorage.setItem('room_code', data.data.room.code);
-		// 	history.push('/room');
-		// }
+		if (isNew || (!isNew && roomCode)) {
+			let { data } = isNew
+				? await axios.post(
+						'/api/v1/rooms/new',
+						{},
+						{
+							headers: {
+								Authorization: `Basic ${AUTH_TOKEN}`
+							}
+						}
+					)
+				: await axios.post(
+						'/api/v1/rooms/join',
+						{ roomCode },
+						{
+							headers: {
+								Authorization: `Basic ${AUTH_TOKEN}`
+							}
+						}
+					);
+			console.log(data);
+			sessionStorage.setItem('firstname', data.data.room.users[0].firstName);
+			sessionStorage.setItem('room_code', data.data.room.code);
+			handleClose();
+		}
 	};
 
 	return (
-		<div className="newRoom">
-			<Dialog onClose={handleClose} aria-labelledby="new-room-dialog" open={open}>
-				<DialogTitle id="new-room-dialog">New Room</DialogTitle>
+		<Dialog onClose={handleClose} aria-labelledby="new-room-dialog" open={open} className="newRoom">
+			<DialogTitle id="new-room-dialog">New Room</DialogTitle>
+			<DialogContent className="newRoom__content">
 				<form>
 					<ButtonGroup className="newRoom__type" color="primary">
 						<Button
@@ -59,8 +76,8 @@ function NewRoom({ history, onClose, open }: any) {
 						Proceed
 					</Button>
 				</form>
-			</Dialog>
-		</div>
+			</DialogContent>
+		</Dialog>
 	);
 }
 

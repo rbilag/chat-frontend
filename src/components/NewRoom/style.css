@@ -1,18 +1,24 @@
-.newRoom__content > form {
-	display: flex;
-	flex-flow: row wrap;
-	max-width: 40rem;
+.newRoom__content {
+	background-color: #ededed;
+	padding: 3rem;
+	min-height: 15rem;
 }
-.newRoom__content > form > input {
+.newRoom__content > form {
+	text-align: center;
+}
+
+.newRoom__content > form input {
 	border-radius: 2rem;
 	padding: 0.8rem;
 	margin: 0.35rem 0;
 	border: 2px solid #e4e4e4;
 	outline: none;
-	width: 100%;
+	width: calc(100% - 1rem);
 }
+
 .newRoom__type {
 	margin: 0.35rem auto;
+	width: 100%;
 }
 .newRoom__type .newRoom__button {
 	color: #098a90;
