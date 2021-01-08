@@ -35,7 +35,6 @@ function NewRoom({ history, onClose, open }: any) {
 						}
 					);
 			console.log(data);
-			sessionStorage.setItem('firstname', data.data.room.users[0].firstName);
 			sessionStorage.setItem('room_code', data.data.room.code);
 			handleClose();
 		}

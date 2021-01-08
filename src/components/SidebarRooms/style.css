@@ -1,23 +1,23 @@
-.sidebarMember {
+.sidebarRoom {
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: center;
 	padding: 0.75rem 1rem;
 	border-bottom: 1px solid #f6f6f6;
 }
-.sidebarMember:hover {
+.sidebarRoom:hover {
 	background-color: #ebebeb;
 }
-.sidebarMember__details {
+.sidebarRoom__details {
 	flex-grow: 2;
 	margin-left: 0.75rem;
 	cursor: pointer;
 }
-.sidebarMember__details > h2,
-.sidebarMember__details > p {
+.sidebarRoom__details > h2,
+.sidebarRoom__details > p {
 	margin: 0;
 }
 
-.sidebarMember__details > h2 {
+.sidebarRoom__details > h2 {
 	font-size: 1.2rem;
 }

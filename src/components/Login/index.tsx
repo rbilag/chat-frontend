@@ -13,6 +13,7 @@ function Login({ history }: any) {
 			let { data } = await axios.post('/api/v1/login', { username, password });
 			console.log(data);
 			sessionStorage.setItem('AUTH', data.authorization);
+			sessionStorage.setItem('username', data.data.username);
 			history.push('/room');
 		}
 	};

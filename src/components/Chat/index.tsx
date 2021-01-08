@@ -14,6 +14,7 @@ const Chat = ({ name, room }: UserRoom) => {
 	const context = useContext(ChatContext);
 	const [ messages, setMessages ] = useState([] as any[]);
 	const [ input, setInput ] = useState('');
+	const AUTH_TOKEN = sessionStorage.getItem('AUTH');
 
 	console.log(messages);
 
@@ -25,9 +26,19 @@ const Chat = ({ name, room }: UserRoom) => {
 			context.join({ name, room });
 			return () => {
 				console.log('Disconnecting Socket Context..');
-				axios.post('/api/v1/rooms/leave', { nickname: name, roomCode: room }).then((res) => {
-					console.log(res);
-				});
+				axios
+					.post(
+						'/api/v1/rooms/leave',
+						{ nickname: name, roomCode: room },
+						{
+							headers: {
+								Authorization: `Basic ${AUTH_TOKEN}`
+							}
+						}
+					)
+					.then((res) => {
+						console.log(res);
+					});
 				context.disconnect();
 			};
 		},
@@ -101,7 +112,7 @@ const Chat = ({ name, room }: UserRoom) => {
 							className={`chat__message ${name === user.username && 'chat__message--sender'} ${user.username ===
 								'Chatbot' && 'chat__message--bot'}`}
 						>
-							<span className="chat__person">{user.username}</span>
+							<span className="chat__person">{name === user.username ? 'You' : user.username}</span>
 							{content}
 							<span className="chat__timestamp">{createdAt}</span>
 						</p>
