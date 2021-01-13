@@ -8,8 +8,8 @@ function NewRoom({ history, onClose, open }: any) {
 	const [ roomCode, setRoomCode ] = useState('');
 	const AUTH_TOKEN = sessionStorage.getItem('AUTH');
 
-	const handleClose = () => {
-		onClose();
+	const handleClose = (val = false) => {
+		onClose(val);
 	};
 
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -36,12 +36,12 @@ function NewRoom({ history, onClose, open }: any) {
 					);
 			console.log(data);
 			sessionStorage.setItem('room_code', data.data.room.code);
-			handleClose();
+			handleClose(data.data.room);
 		}
 	};
 
 	return (
-		<Dialog onClose={handleClose} aria-labelledby="new-room-dialog" open={open} className="newRoom">
+		<Dialog onClose={() => handleClose(false)} aria-labelledby="new-room-dialog" open={open} className="newRoom">
 			<DialogTitle id="new-room-dialog">New Room</DialogTitle>
 			<DialogContent className="newRoom__content">
 				<form>

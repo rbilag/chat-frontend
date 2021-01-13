@@ -3,3 +3,19 @@
 	flex-flow: row nowrap;
 	background-color: #ededed;
 }
+.chat--no-room .chat__header {
+	height: 3rem;
+}
+
+.chat--no-room .chat__body {
+	height: calc(100vh - 4rem);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.chat--no-room .chat__body p {
+	text-align: center;
+	font-style: italic;
+	color: #6b6b6b;
+	font-size: 1.5rem;
+}
