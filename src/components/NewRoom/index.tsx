@@ -5,6 +5,7 @@ import './style.css';
 
 function NewRoom({ history, onClose, open }: any) {
 	const [ isNew, setisNew ] = useState(true);
+	const [ description, setDescription ] = useState('');
 	const [ roomCode, setRoomCode ] = useState('');
 	const AUTH_TOKEN = sessionStorage.getItem('AUTH');
 
@@ -18,7 +19,7 @@ function NewRoom({ history, onClose, open }: any) {
 			let { data } = isNew
 				? await axios.post(
 						'/api/v1/rooms/new',
-						{},
+						{ description },
 						{
 							headers: {
 								Authorization: `Basic ${AUTH_TOKEN}`
@@ -60,7 +61,14 @@ function NewRoom({ history, onClose, open }: any) {
 						</Button>
 					</ButtonGroup>
 
-					{!isNew && (
+					{isNew ? (
+						<textarea
+							rows={3}
+							value={description}
+							onChange={(e) => setDescription(e.target.value)}
+							placeholder="Room Description"
+						/>
+					) : (
 						<input value={roomCode} onChange={(e) => setRoomCode(e.target.value)} type="text" placeholder="Room Code" />
 					)}
 

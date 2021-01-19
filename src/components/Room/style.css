@@ -3,6 +3,9 @@
 	flex-flow: row nowrap;
 	background-color: #ededed;
 }
+.chat--no-room {
+	flex-grow: 6;
+}
 .chat--no-room .chat__header {
 	height: 3rem;
 }

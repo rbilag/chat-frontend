@@ -4,6 +4,7 @@ import Chat from '../Chat';
 import Sidebar from '../Sidebar';
 import NewRoom from '../NewRoom';
 import axios from '../../services/Axios';
+import RoomDetails from '../RoomDetails';
 
 const Room = () => {
 	// TODO create ROOM interface
@@ -11,7 +12,7 @@ const Room = () => {
 	const roomCode = sessionStorage.getItem('room_code');
 	const AUTH_TOKEN = sessionStorage.getItem('AUTH');
 	const [ open, setOpen ] = useState(false);
-	let [ rooms, setRooms ] = useState([]);
+	const [ rooms, setRooms ]: Array<any> = useState([]);
 
 	useEffect(
 		() => {
@@ -33,11 +34,20 @@ const Room = () => {
 			});
 	};
 
+	const getCurrentRoom = () => {
+		return rooms.find((room: any) => {
+			return room.code === roomCode;
+		});
+	};
+
 	return (
 		<div className="room">
 			<Sidebar onNewRoom={() => setOpen(true)} rooms={rooms} />
 			{roomCode ? (
-				<Chat name={username!} room={roomCode!} />
+				<React.Fragment>
+					<Chat name={username!} room={roomCode!} />
+					<RoomDetails roomDetails={getCurrentRoom()} />
+				</React.Fragment>
 			) : (
 				<div className="chat chat--no-room">
 					<div className="chat__header" />
@@ -46,9 +56,10 @@ const Room = () => {
 					</div>
 				</div>
 			)}
+
 			<NewRoom
 				open={open}
-				onClose={(room: never) => {
+				onClose={(room: any) => {
 					if (room) {
 						setRooms([ ...rooms, room ]);
 					}

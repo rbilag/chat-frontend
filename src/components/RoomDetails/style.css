@@ -1,0 +1,9 @@
+.room-details {
+	flex-grow: 1;
+	text-align: center;
+	padding: 5rem 0;
+}
+.room-details table {
+	width: 100%;
+	margin: 3rem 0;
+}

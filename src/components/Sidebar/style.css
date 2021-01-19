@@ -2,17 +2,12 @@
 	flex-grow: 1;
 }
 .sidebar__header {
-	display: flex;
-	flex-flow: row nowrap;
-	justify-content: space-between;
 	padding: 0.35rem;
 	border-right: 1px solid lightgray;
 }
 .sidebar__headerIcons {
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	min-width: 10vw;
+	justify-content: flex-end;
 }
 .sidebar__headerIcons > .MuiIconButton-root {
 	margin-right: 0.5rem;

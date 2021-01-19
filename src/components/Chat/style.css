@@ -1,5 +1,5 @@
 .chat {
-	flex-grow: 6;
+	flex-grow: 4;
 }
 .chat__header {
 	display: flex;
@@ -50,7 +50,7 @@
 	font-weight: bold;
 }
 .chat__timestamp {
-	font-size: xx-small;
+	font-size: x-small;
 	margin-left: 0.8rem;
 }
 
