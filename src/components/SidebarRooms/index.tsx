@@ -6,7 +6,7 @@ const SidebarRoom = ({ room }: any) => {
 		<div className="sidebarRoom">
 			<div className="sidebarRoom__details">
 				<h2>{room.code}</h2>
-				<p>Room details</p>
+				<p>{room.description}</p>
 			</div>
 		</div>
 	);

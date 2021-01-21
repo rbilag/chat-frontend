@@ -21,3 +21,7 @@
 .sidebarRoom__details > h2 {
 	font-size: 1.2rem;
 }
+
+.sidebarRoom__details > p {
+	color: #8a8a8a;
+}

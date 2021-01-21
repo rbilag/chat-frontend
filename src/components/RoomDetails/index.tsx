@@ -22,8 +22,8 @@ function RoomDetails({ roomDetails }: any) {
 				<tbody>
 					{users.map(({ firstName, lastName, username }: any) => {
 						return (
-							<tr>
-								<td>{firstName + lastName}</td>
+							<tr key={username}>
+								<td>{`${firstName} ${lastName}`}</td>
 								<td>{username}</td>
 							</tr>
 						);

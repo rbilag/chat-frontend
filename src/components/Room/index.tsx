@@ -31,6 +31,9 @@ const Room = () => {
 			.then(({ data }) => {
 				console.log(data);
 				setRooms(data.data.rooms);
+				if (data.data.rooms[0]) {
+					sessionStorage.setItem('room_code', data.data.rooms[0].code);
+				}
 			});
 	};
 
