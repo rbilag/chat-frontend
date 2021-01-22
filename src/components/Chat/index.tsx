@@ -7,14 +7,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import './style.css';
 import { ChatMessage, UserRoom } from '../../types';
 import { ChatContext } from '../../context/ChatContext';
-import axios from '../../services/Axios';
+import chatHttp from '../../services/Http';
 import { parseISO, differenceInCalendarDays, format, formatDistanceToNow } from 'date-fns';
 
 const Chat = ({ name, room }: UserRoom) => {
 	const context = useContext(ChatContext);
 	const [ messages, setMessages ] = useState([] as any[]);
 	const [ input, setInput ] = useState('');
-	const AUTH_TOKEN = sessionStorage.getItem('AUTH');
 
 	console.log(messages);
 
@@ -26,19 +25,9 @@ const Chat = ({ name, room }: UserRoom) => {
 			context.join({ name, room });
 			return () => {
 				console.log('Disconnecting Socket Context..');
-				axios
-					.post(
-						'/api/v1/rooms/leave',
-						{ nickname: name, roomCode: room },
-						{
-							headers: {
-								Authorization: `Basic ${AUTH_TOKEN}`
-							}
-						}
-					)
-					.then((res) => {
-						console.log(res);
-					});
+				chatHttp.leaveRoom({ nickname: name, roomCode: room }).then((res) => {
+					console.log(res);
+				});
 				context.disconnect();
 			};
 		},

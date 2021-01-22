@@ -3,38 +3,28 @@ import './style.css';
 import Chat from '../Chat';
 import Sidebar from '../Sidebar';
 import NewRoom from '../NewRoom';
-import axios from '../../services/Axios';
+import chatHttp from '../../services/Http';
 import RoomDetails from '../RoomDetails';
 
 const Room = () => {
 	// TODO create ROOM interface
 	const username = sessionStorage.getItem('username');
 	const roomCode = sessionStorage.getItem('room_code');
-	const AUTH_TOKEN = sessionStorage.getItem('AUTH');
 	const [ open, setOpen ] = useState(false);
 	const [ rooms, setRooms ]: Array<any> = useState([]);
 
-	useEffect(
-		() => {
-			getRooms(AUTH_TOKEN!);
-		},
-		[ AUTH_TOKEN ]
-	);
+	useEffect(() => {
+		getRooms();
+	}, []);
 
-	const getRooms = (token: String) => {
-		axios
-			.get('/api/v1/rooms', {
-				headers: {
-					Authorization: `Basic ${token}`
-				}
-			})
-			.then(({ data }) => {
-				console.log(data);
-				setRooms(data.data.rooms);
-				if (data.data.rooms[0]) {
-					sessionStorage.setItem('room_code', data.data.rooms[0].code);
-				}
-			});
+	const getRooms = () => {
+		chatHttp.getRooms().then(({ data }) => {
+			console.log(data);
+			setRooms(data.rooms);
+			if (data.rooms[0]) {
+				sessionStorage.setItem('room_code', data.rooms[0].code);
+			}
+		});
 	};
 
 	const getCurrentRoom = () => {
@@ -66,7 +56,7 @@ const Room = () => {
 					if (room) {
 						setRooms([ ...rooms, room ]);
 					}
-					// getRooms(AUTH_TOKEN!);
+					// getRooms();
 					setOpen(false);
 				}}
 			/>

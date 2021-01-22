@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Button, ButtonGroup, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
-import axios from '../../services/Axios';
+import chatHttp from '../../services/Http';
 import './style.css';
 
 function NewRoom({ history, onClose, open }: any) {
 	const [ isNew, setisNew ] = useState(true);
 	const [ description, setDescription ] = useState('');
 	const [ roomCode, setRoomCode ] = useState('');
-	const AUTH_TOKEN = sessionStorage.getItem('AUTH');
 
 	const handleClose = (val = false) => {
 		onClose(val);
@@ -16,28 +15,10 @@ function NewRoom({ history, onClose, open }: any) {
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		if (isNew || (!isNew && roomCode)) {
-			let { data } = isNew
-				? await axios.post(
-						'/api/v1/rooms/new',
-						{ description },
-						{
-							headers: {
-								Authorization: `Basic ${AUTH_TOKEN}`
-							}
-						}
-					)
-				: await axios.post(
-						'/api/v1/rooms/join',
-						{ roomCode },
-						{
-							headers: {
-								Authorization: `Basic ${AUTH_TOKEN}`
-							}
-						}
-					);
+			let { data } = isNew ? await chatHttp.createRoom({ description }) : await chatHttp.joinRoom({ roomCode });
 			console.log(data);
-			sessionStorage.setItem('room_code', data.data.room.code);
-			handleClose(data.data.room);
+			sessionStorage.setItem('room_code', data.room.code);
+			handleClose(data.room);
 		}
 	};
 

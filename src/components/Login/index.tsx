@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
-import axios from '../../services/Axios';
+import chatHttp from '../../services/Http';
 import './style.css';
 
 function Login({ history }: any) {
@@ -10,10 +10,10 @@ function Login({ history }: any) {
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		if (username && password) {
-			let { data } = await axios.post('/api/v1/login', { username, password });
+			let { authorization, data } = await chatHttp.login({ username, password });
 			console.log(data);
-			sessionStorage.setItem('AUTH', data.authorization);
-			sessionStorage.setItem('username', data.data.username);
+			sessionStorage.setItem('AUTH', authorization);
+			sessionStorage.setItem('username', data.username);
 			history.push('/room');
 		}
 	};
