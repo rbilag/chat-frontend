@@ -18,13 +18,18 @@ const Room = () => {
 	}, []);
 
 	const getRooms = () => {
-		chatHttp.getRooms().then(({ data }) => {
-			console.log(data);
-			setRooms(data.rooms);
-			if (data.rooms[0]) {
-				sessionStorage.setItem('room_code', data.rooms[0].code);
-			}
-		});
+		chatHttp
+			.getRooms()
+			.then(({ data }) => {
+				console.log(data);
+				setRooms(data.rooms);
+				if (data.rooms[0]) {
+					sessionStorage.setItem('room_code', data.rooms[0].code);
+				}
+			})
+			.catch(({ response }) => {
+				console.log(response);
+			});
 	};
 
 	const getCurrentRoom = () => {

@@ -15,10 +15,14 @@ function NewRoom({ history, onClose, open }: any) {
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		if (isNew || (!isNew && roomCode)) {
-			let { data } = isNew ? await chatHttp.createRoom({ description }) : await chatHttp.joinRoom({ roomCode });
-			console.log(data);
-			sessionStorage.setItem('room_code', data.room.code);
-			handleClose(data.room);
+			try {
+				let { data } = isNew ? await chatHttp.createRoom({ description }) : await chatHttp.joinRoom({ roomCode });
+				console.log(data);
+				sessionStorage.setItem('room_code', data.room.code);
+				handleClose(data.room);
+			} catch (e) {
+				console.log(e.response.data);
+			}
 		}
 	};
 

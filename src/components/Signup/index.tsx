@@ -11,23 +11,33 @@ function SignUp({ history }: any) {
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
 	const [ isAvailable, setIsAvailable ] = useState({ email: true, username: true });
-	console.log(isAvailable);
 
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		if (username && firstName && email && password && isAvailable.email && isAvailable.username) {
-			let { success } = await chatHttp.register({ username, firstName, lastName, email, password });
-			if (success) history.push('/login');
+			chatHttp
+				.register({ username, firstName, lastName, email, password })
+				.then(({ success }) => {
+					if (success) history.push('/login');
+				})
+				.catch(({ response }) => {
+					console.log(response.data);
+				});
 		}
 	};
 
 	const checkAvailability = async (value: string, type: string) => {
 		if (type === 'email') setEmail(value);
 		else setUsername(value);
-
-		let resp = await chatHttp.checkAvailability({ value, type });
-		if (type === 'email') setIsAvailable({ ...isAvailable, email: resp.isAvailable });
-		else setIsAvailable({ ...isAvailable, username: resp.isAvailable });
+		chatHttp
+			.checkAvailability({ value, type })
+			.then((resp) => {
+				if (type === 'email') setIsAvailable({ ...isAvailable, email: resp.isAvailable });
+				else setIsAvailable({ ...isAvailable, username: resp.isAvailable });
+			})
+			.catch(({ response }) => {
+				console.log(response.data);
+			});
 	};
 
 	return (

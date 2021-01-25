@@ -25,9 +25,14 @@ const Chat = ({ name, room }: UserRoom) => {
 			context.join({ name, room });
 			return () => {
 				console.log('Disconnecting Socket Context..');
-				chatHttp.leaveRoom({ nickname: name, roomCode: room }).then((res) => {
-					console.log(res);
-				});
+				chatHttp
+					.leaveRoom({ nickname: name, roomCode: room })
+					.then((res) => {
+						console.log(res);
+					})
+					.catch(({ response }) => {
+						console.log(response.data);
+					});
 				context.disconnect();
 			};
 		},

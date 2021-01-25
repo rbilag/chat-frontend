@@ -6,15 +6,24 @@ import './style.css';
 function Login({ history }: any) {
 	const [ username, setUsername ] = useState('');
 	const [ password, setPassword ] = useState('');
+	const [ errorMsg, setErrorMsg ] = useState('');
 
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		if (username && password) {
-			let { authorization, data } = await chatHttp.login({ username, password });
-			console.log(data);
-			sessionStorage.setItem('AUTH', authorization);
-			sessionStorage.setItem('username', data.username);
-			history.push('/room');
+			chatHttp
+				.login({ username, password })
+				.then(({ authorization, data }) => {
+					console.log(data);
+					setErrorMsg('');
+					sessionStorage.setItem('AUTH', authorization);
+					sessionStorage.setItem('username', data.username);
+					history.push('/room');
+				})
+				.catch(({ response }) => {
+					console.log(response.data);
+					setErrorMsg(response.data.message);
+				});
 		}
 	};
 
@@ -45,6 +54,7 @@ function Login({ history }: any) {
 						Proceed
 					</Button>
 				</form>
+				{errorMsg && <strong className="error__msg">{errorMsg}</strong>}
 			</div>
 		</div>
 	);
