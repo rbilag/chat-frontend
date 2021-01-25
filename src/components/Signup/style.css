@@ -39,3 +39,8 @@
 .signup__button--submit.MuiButton-contained:hover {
 	background-color: #177a80;
 }
+.signup .error__msg {
+	margin: 0 1rem;
+	font-size: 0.75rem;
+	color: #a90b0b;
+}

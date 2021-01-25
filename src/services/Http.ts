@@ -1,5 +1,16 @@
 import axios from './Axios';
 
+const checkAvailability = async (data: any) => {
+	return new Promise<any>(async (resolve, reject) => {
+		try {
+			const response = await axios.post('/users/checkAvailability', data);
+			resolve(response.data);
+		} catch (error) {
+			reject(error);
+		}
+	});
+};
+
 const register = async (data: any) => {
 	return new Promise<any>(async (resolve, reject) => {
 		try {
@@ -66,6 +77,6 @@ const getRooms = async () => {
 	});
 };
 
-const chatHttp = { register, login, createRoom, joinRoom, leaveRoom, getRooms };
+const chatHttp = { checkAvailability, register, login, createRoom, joinRoom, leaveRoom, getRooms };
 
 export default chatHttp;
