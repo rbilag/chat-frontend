@@ -33,6 +33,17 @@ const login = async (data: any) => {
 	});
 };
 
+const changeLoginStatus = async (data: any) => {
+	return new Promise<any>(async (resolve, reject) => {
+		try {
+			const response = await axios.post('/users/changeStatus', data);
+			resolve(response.data);
+		} catch (error) {
+			reject(error);
+		}
+	});
+};
+
 const createRoom = async (data: any) => {
 	return new Promise<any>(async (resolve, reject) => {
 		try {
@@ -77,6 +88,6 @@ const getRooms = async () => {
 	});
 };
 
-const chatHttp = { checkAvailability, register, login, createRoom, joinRoom, leaveRoom, getRooms };
+const chatHttp = { checkAvailability, changeLoginStatus, register, login, createRoom, joinRoom, leaveRoom, getRooms };
 
 export default chatHttp;

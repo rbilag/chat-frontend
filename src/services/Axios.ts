@@ -7,7 +7,7 @@ const instance = axios.create({
 instance.interceptors.request.use((req) => {
 	console.log(`${req.method} ${req.url}`);
 	if (req.url !== '/register' && req.url !== '/login') {
-		req.headers = { ...req.headers, Authorization: `Basic ${sessionStorage.getItem('AUTH')}` };
+		req.headers = { ...req.headers, Authorization: `Basic ${localStorage.getItem('AUTH')}` };
 	}
 	return req;
 });

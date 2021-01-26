@@ -18,7 +18,7 @@ function NewRoom({ history, onClose, open }: any) {
 			try {
 				let { data } = isNew ? await chatHttp.createRoom({ description }) : await chatHttp.joinRoom({ roomCode });
 				console.log(data);
-				sessionStorage.setItem('room_code', data.room.code);
+				localStorage.setItem('room_code', data.room.code);
 				handleClose(data.room);
 			} catch (e) {
 				console.log(e.response.data);

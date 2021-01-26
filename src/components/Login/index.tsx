@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@material-ui/core';
 import chatHttp from '../../services/Http';
 import './style.css';
@@ -16,8 +16,8 @@ function Login({ history }: any) {
 				.then(({ authorization, data }) => {
 					console.log(data);
 					setErrorMsg('');
-					sessionStorage.setItem('AUTH', authorization);
-					sessionStorage.setItem('username', data.username);
+					localStorage.setItem('AUTH', authorization);
+					localStorage.setItem('username', data.username);
 					history.push('/room');
 				})
 				.catch(({ response }) => {
@@ -26,6 +26,18 @@ function Login({ history }: any) {
 				});
 		}
 	};
+
+	useEffect(
+		() => {
+			const token = localStorage.getItem('AUTH');
+			const username = localStorage.getItem('username');
+			if (token && username) {
+				chatHttp.changeLoginStatus({ newValue: true });
+				history.push('/room');
+			}
+		},
+		[ history ]
+	);
 
 	return (
 		<div className="login">

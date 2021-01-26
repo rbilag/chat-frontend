@@ -6,10 +6,11 @@ import NewRoom from '../NewRoom';
 import chatHttp from '../../services/Http';
 import RoomDetails from '../RoomDetails';
 
-const Room = () => {
+const Room = ({ history }: any) => {
+	console.log(history);
 	// TODO create ROOM interface
-	const username = sessionStorage.getItem('username');
-	const roomCode = sessionStorage.getItem('room_code');
+	const username = localStorage.getItem('username');
+	const roomCode = localStorage.getItem('room_code');
 	const [ open, setOpen ] = useState(false);
 	const [ rooms, setRooms ]: Array<any> = useState([]);
 
@@ -24,11 +25,15 @@ const Room = () => {
 				console.log(data);
 				setRooms(data.rooms);
 				if (data.rooms[0]) {
-					sessionStorage.setItem('room_code', data.rooms[0].code);
+					localStorage.setItem('room_code', data.rooms[0].code);
 				}
 			})
 			.catch(({ response }) => {
 				console.log(response);
+				if (response.status === 401) {
+					localStorage.clear();
+					history.push('/login');
+				}
 			});
 	};
 
@@ -40,7 +45,7 @@ const Room = () => {
 
 	return (
 		<div className="room">
-			<Sidebar onNewRoom={() => setOpen(true)} rooms={rooms} />
+			<Sidebar onNewRoom={() => setOpen(true)} rooms={rooms} history={history} />
 			{roomCode ? (
 				<React.Fragment>
 					<Chat name={username!} room={roomCode!} />

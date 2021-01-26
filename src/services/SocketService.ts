@@ -9,6 +9,7 @@ export class SocketService {
 
 	public init(): SocketService {
 		console.log('Initializing Socket Service');
+		// , {query: `userId=${userId}`}
 		this.socket = io('localhost:8080');
 		return this;
 	}
