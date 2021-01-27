@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@material-ui/core';
 import chatHttp from '../../services/Http';
 import './style.css';
 
 function Login({ history }: any) {
-	const [ username, setUsername ] = useState('');
-	const [ password, setPassword ] = useState('');
+	const usernameRef = useRef<HTMLInputElement>(null);
+	const passwordRef = useRef<HTMLInputElement>(null);
 	const [ errorMsg, setErrorMsg ] = useState('');
 
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
-		if (username && password) {
+		if (usernameRef.current && usernameRef.current.value && passwordRef.current && passwordRef.current.value) {
 			chatHttp
-				.login({ username, password })
+				.login({ username: usernameRef.current.value, password: passwordRef.current.value })
 				.then(({ authorization, data }) => {
 					console.log(data);
 					setErrorMsg('');
@@ -24,8 +24,18 @@ function Login({ history }: any) {
 					console.log(response.data);
 					setErrorMsg(response.data.message);
 				});
+		} else {
+			setErrorMsg('Fill-in both username and password');
 		}
 	};
+
+	const goToSignup = async () => {
+		history.push('/signup');
+	};
+
+	useEffect(() => {
+		if (usernameRef.current) usernameRef.current.focus();
+	}, []);
 
 	useEffect(
 		() => {
@@ -43,18 +53,8 @@ function Login({ history }: any) {
 		<div className="login">
 			<div className="login__area">
 				<form>
-					<input
-						value={username}
-						onChange={(e) => setUsername(e.target.value)}
-						type="text"
-						placeholder="Username or Email"
-					/>
-					<input
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						type="password"
-						placeholder="Password"
-					/>
+					<input ref={usernameRef} type="text" placeholder="Username or Email" required />
+					<input ref={passwordRef} type="password" placeholder="Password" required />
 					<Button
 						onClick={proceed}
 						type="submit"
@@ -64,6 +64,16 @@ function Login({ history }: any) {
 						size="large"
 					>
 						Proceed
+					</Button>
+					<Button
+						onClick={goToSignup}
+						type="button"
+						className="login__button login__button--signin"
+						variant="contained"
+						color="secondary"
+						size="large"
+					>
+						Register
 					</Button>
 				</form>
 				{errorMsg && <strong className="error__msg">{errorMsg}</strong>}

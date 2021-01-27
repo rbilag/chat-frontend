@@ -23,12 +23,20 @@
 	outline: none;
 	width: 100%;
 }
-.login__button--submit.MuiButton-contained {
-	background-color: #098a90;
+.login__button.MuiButton-contained {
 	letter-spacing: 0.1rem;
 	margin: 1.75rem auto 0;
 	padding: 0.75rem 5rem;
 }
+.login__button--submit.MuiButton-contained {
+	background-color: #098a90;
+}
 .login__button--submit.MuiButton-contained:hover {
 	background-color: #177a80;
+}
+.login__button--signin.MuiButton-contained {
+	background-color: #636363;
+}
+.login__button--signin.MuiButton-contained:hover {
+	background-color: #505050;
 }

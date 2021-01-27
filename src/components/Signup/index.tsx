@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import { Button } from '@material-ui/core';
 import chatHttp from '../../services/Http';
@@ -6,23 +6,33 @@ import './style.css';
 
 function SignUp({ history }: any) {
 	const [ username, setUsername ] = useState('');
-	const [ firstName, setFirstName ] = useState('');
-	const [ lastName, setLastName ] = useState('');
 	const [ email, setEmail ] = useState('');
-	const [ password, setPassword ] = useState('');
 	const [ isAvailable, setIsAvailable ] = useState({ email: true, username: true });
+	const firstNameRef = useRef<HTMLInputElement>(null);
+	const lastNameRef = useRef<HTMLInputElement>(null);
+	const passwordRef = useRef<HTMLInputElement>(null);
+	const [ errorMsg, setErrorMsg ] = useState('');
 
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
-		if (username && firstName && email && password && isAvailable.email && isAvailable.username) {
+		if (canProceed() && firstNameRef.current && passwordRef.current) {
+			setErrorMsg('');
 			chatHttp
-				.register({ username, firstName, lastName, email, password })
+				.register({
+					username,
+					firstName: firstNameRef.current.value,
+					lastName: lastNameRef.current ? lastNameRef.current.value : '',
+					email,
+					password: passwordRef.current.value
+				})
 				.then(({ success }) => {
 					if (success) history.push('/login');
 				})
 				.catch(({ response }) => {
 					console.log(response.data);
 				});
+		} else {
+			setErrorMsg('Fill-in all required fields');
 		}
 	};
 
@@ -40,6 +50,19 @@ function SignUp({ history }: any) {
 			});
 	};
 
+	const canProceed = () => {
+		return (
+			username &&
+			email &&
+			isAvailable.email &&
+			isAvailable.username &&
+			firstNameRef.current &&
+			passwordRef.current &&
+			passwordRef.current.value &&
+			firstNameRef.current.value
+		);
+	};
+
 	return (
 		<div className="signup">
 			<div className="signup__area">
@@ -50,6 +73,7 @@ function SignUp({ history }: any) {
 						value={email}
 						type="text"
 						placeholder="Email"
+						required
 					/>
 					{email &&
 					!isAvailable.email && (
@@ -61,25 +85,16 @@ function SignUp({ history }: any) {
 						value={username}
 						type="text"
 						placeholder="Username"
+						required
 					/>
 					{username &&
 					!isAvailable.username && (
 						<strong className="error__msg">{username} already taken, please try another username.</strong>
 					)}
-					<input
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						type="password"
-						placeholder="Password"
-					/>
+					<input ref={passwordRef} type="password" placeholder="Password" required />
 					<div className="signup__name">
-						<input
-							value={firstName}
-							onChange={(e) => setFirstName(e.target.value)}
-							type="text"
-							placeholder="First Name"
-						/>
-						<input value={lastName} onChange={(e) => setLastName(e.target.value)} type="text" placeholder="Last Name" />
+						<input ref={firstNameRef} type="text" placeholder="First Name" required />
+						<input ref={lastNameRef} type="text" placeholder="Last Name" />
 					</div>
 
 					<Button
@@ -89,11 +104,11 @@ function SignUp({ history }: any) {
 						variant="contained"
 						color="primary"
 						size="large"
-						disabled={!isAvailable.email || !isAvailable.username || !username || !firstName || !email || !password}
 					>
 						Proceed
 					</Button>
 				</form>
+				{errorMsg && <strong className="error__msg">{errorMsg}</strong>}
 			</div>
 		</div>
 	);
