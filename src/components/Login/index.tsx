@@ -16,8 +16,8 @@ function Login({ history }: any) {
 				.then(({ authorization, data }) => {
 					console.log(data);
 					setErrorMsg('');
-					localStorage.setItem('AUTH', authorization);
-					localStorage.setItem('username', data.username);
+					localStorage.setItem('chat-app-auth', authorization);
+					localStorage.setItem('chat-app-username', data.username);
 					history.push('/room');
 				})
 				.catch(({ response }) => {
@@ -39,8 +39,8 @@ function Login({ history }: any) {
 
 	useEffect(
 		() => {
-			const token = localStorage.getItem('AUTH');
-			const username = localStorage.getItem('username');
+			const token = localStorage.getItem('chat-app-auth');
+			const username = localStorage.getItem('chat-app-username');
 			if (token && username) {
 				chatHttp.changeLoginStatus({ newValue: true });
 				history.push('/room');

@@ -5,37 +5,42 @@ import Sidebar from '../Sidebar';
 import NewRoom from '../NewRoom';
 import chatHttp from '../../services/Http';
 import RoomDetails from '../RoomDetails';
+import { useChat } from '../../context/ChatContext';
 
 const Room = ({ history }: any) => {
-	console.log(history);
 	// TODO create ROOM interface
-	const username = localStorage.getItem('username');
-	const roomCode = localStorage.getItem('room_code');
-	const [ open, setOpen ] = useState(false);
+	const username = localStorage.getItem('chat-app-username');
+	const roomCode = localStorage.getItem('chat-app-room-code');
+	const [ openModal, setOpenModal ] = useState(false);
 	const [ rooms, setRooms ]: Array<any> = useState([]);
+	const chatSocket = useChat();
 
-	useEffect(() => {
-		getRooms();
-	}, []);
-
-	const getRooms = () => {
-		chatHttp
-			.getRooms()
-			.then(({ data }) => {
-				console.log(data);
-				setRooms(data.rooms);
-				if (data.rooms[0]) {
-					localStorage.setItem('room_code', data.rooms[0].code);
-				}
-			})
-			.catch(({ response }) => {
-				console.log(response);
-				if (response.status === 401) {
-					localStorage.clear();
-					history.push('/login');
-				}
-			});
-	};
+	useEffect(
+		() => {
+			console.log('Initializing Socket Context..');
+			chatSocket.init();
+			chatHttp
+				.getRooms()
+				.then(({ data }) => {
+					console.log(data);
+					setRooms(data.rooms);
+					if (data.rooms[0]) {
+						localStorage.setItem('chat-app-room-code', data.rooms[0].code);
+						data.rooms.forEach((room: any) => {
+							chatSocket.join({ name: username || '', room });
+						});
+					}
+				})
+				.catch(({ response }) => {
+					console.log(response);
+					if (response.status === 401) {
+						localStorage.clear();
+						history.push('/login');
+					}
+				});
+		},
+		[ history, chatSocket ]
+	);
 
 	const getCurrentRoom = () => {
 		return rooms.find((room: any) => {
@@ -43,12 +48,27 @@ const Room = ({ history }: any) => {
 		});
 	};
 
+	// TODO room parameter can be ROOM interface or boolean
+	const handleModalClose = (room: any) => {
+		if (room) {
+			setRooms([ ...rooms, room ]);
+		}
+		setOpenModal(false);
+	};
+
 	return (
 		<div className="room">
-			<Sidebar onNewRoom={() => setOpen(true)} rooms={rooms} history={history} />
+			<Sidebar
+				onNewRoom={() => setOpenModal(true)}
+				rooms={rooms}
+				history={history}
+				chatSocket={chatSocket}
+				name={username!}
+				room={roomCode!}
+			/>
 			{roomCode ? (
 				<React.Fragment>
-					<Chat name={username!} room={roomCode!} />
+					<Chat name={username!} room={roomCode!} chatSocket={chatSocket} />
 					<RoomDetails roomDetails={getCurrentRoom()} />
 				</React.Fragment>
 			) : (
@@ -60,16 +80,7 @@ const Room = ({ history }: any) => {
 				</div>
 			)}
 
-			<NewRoom
-				open={open}
-				onClose={(room: any) => {
-					if (room) {
-						setRooms([ ...rooms, room ]);
-					}
-					// getRooms();
-					setOpen(false);
-				}}
-			/>
+			<NewRoom open={openModal} onClose={handleModalClose} chatSocket={chatSocket} username={username} />
 		</div>
 	);
 };

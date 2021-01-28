@@ -7,13 +7,14 @@ import SearchIcon from '@material-ui/icons/Search';
 import SidebarRoom from '../SidebarRooms';
 import chatHttp from '../../services/Http';
 
-const Sidebar = ({ onNewRoom, rooms, history }: any) => {
-	console.log(history);
+const Sidebar = ({ onNewRoom, rooms, history, chatSocket, name }: any) => {
 	const [ anchorEl, setAnchorEl ] = React.useState<null | HTMLElement>(null);
 	// TODO add on create room listener
 
 	const onLogout = () => {
 		setAnchorEl(null);
+		console.log('Disconnecting Socket Context..');
+		chatSocket.disconnect();
 		chatHttp
 			.changeLoginStatus({ newValue: false })
 			.then((resp) => {

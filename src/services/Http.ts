@@ -88,6 +88,27 @@ const getRooms = async () => {
 	});
 };
 
-const chatHttp = { checkAvailability, changeLoginStatus, register, login, createRoom, joinRoom, leaveRoom, getRooms };
+const getMessages = async () => {
+	return new Promise<any>(async (resolve, reject) => {
+		try {
+			const response = await axios.get('/messages');
+			resolve(response.data);
+		} catch (error) {
+			reject(error);
+		}
+	});
+};
+
+const chatHttp = {
+	checkAvailability,
+	changeLoginStatus,
+	register,
+	login,
+	createRoom,
+	joinRoom,
+	leaveRoom,
+	getRooms,
+	getMessages
+};
 
 export default chatHttp;

@@ -3,7 +3,7 @@ import { Button, ButtonGroup, Dialog, DialogTitle, DialogContent } from '@materi
 import chatHttp from '../../services/Http';
 import './style.css';
 
-function NewRoom({ history, onClose, open }: any) {
+function NewRoom({ history, onClose, open, chatSocket, username }: any) {
 	const [ isNew, setisNew ] = useState(true);
 	const [ description, setDescription ] = useState('');
 	const [ roomCode, setRoomCode ] = useState('');
@@ -17,9 +17,12 @@ function NewRoom({ history, onClose, open }: any) {
 		if (isNew || (!isNew && roomCode)) {
 			try {
 				let { data } = isNew ? await chatHttp.createRoom({ description }) : await chatHttp.joinRoom({ roomCode });
-				console.log(data);
-				localStorage.setItem('room_code', data.room.code);
-				handleClose(data.room);
+				if (data) {
+					console.log(data);
+					chatSocket.join({ name: username, room: data.room.code }, true);
+					localStorage.setItem('chat-app-room-code', data.room.code);
+					handleClose(data.room);
+				}
 			} catch (e) {
 				console.log(e.response.data);
 			}
@@ -27,7 +30,7 @@ function NewRoom({ history, onClose, open }: any) {
 	};
 
 	return (
-		<Dialog onClose={() => handleClose(false)} aria-labelledby="new-room-dialog" open={open} className="newRoom">
+		<Dialog onClose={() => handleClose()} aria-labelledby="new-room-dialog" open={open} className="newRoom">
 			<DialogTitle id="new-room-dialog">New Room</DialogTitle>
 			<DialogContent className="newRoom__content">
 				<form>

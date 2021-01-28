@@ -14,9 +14,9 @@ export class SocketService {
 		return this;
 	}
 
-	public join(user: UserRoom): void {
-		console.log(`${user.name} joined ${user.room}`);
-		this.socket.emit(ChatEvent.JOIN, user);
+	public join(userRoom: UserRoom, isFirst: boolean = false): void {
+		console.log(`${userRoom.name} joined ${userRoom.room}`);
+		this.socket.emit(ChatEvent.JOIN, { userRoom, isFirst });
 	}
 
 	public send(message: ChatMessage): void {

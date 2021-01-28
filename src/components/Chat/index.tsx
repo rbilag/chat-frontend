@@ -3,46 +3,33 @@ import SearchIcon from '@material-ui/icons/Search';
 import SendIcon from '@material-ui/icons/Send';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import MoodIcon from '@material-ui/icons/Mood';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
-import { ChatMessage, UserRoom } from '../../types';
-import { ChatContext } from '../../context/ChatContext';
+import { ChatMessage } from '../../types';
 import chatHttp from '../../services/Http';
 import { parseISO, differenceInCalendarDays, format, formatDistanceToNow } from 'date-fns';
 
-const Chat = ({ name, room }: UserRoom) => {
-	const context = useContext(ChatContext);
+const Chat = ({ name, room, chatSocket }: any) => {
 	const [ messages, setMessages ] = useState([] as any[]);
 	const [ input, setInput ] = useState('');
 
 	console.log(messages);
 
-	useEffect(
-		() => {
-			console.log('Initializing Socket Context..');
-			context.init();
-			console.log({ name, room });
-			context.join({ name, room });
-			return () => {
-				console.log('Disconnecting Socket Context..');
-				chatHttp
-					.leaveRoom({ nickname: name, roomCode: room })
-					.then((res) => {
-						console.log(res);
-					})
-					.catch(({ response }) => {
-						console.log(response.data);
-					});
-				context.disconnect();
-			};
-		},
-		[ context, name, room ]
-	);
+	// const leaveChatRoom = () => {
+	// 	chatHttp
+	// 		.leaveRoom({ nickname: name, roomCode: room })
+	// 		.then((res) => {
+	// 			console.log(res);
+	// 		})
+	// 		.catch(({ response }) => {
+	// 			console.log(response.data);
+	// 		});
+	// };
 
 	useEffect(
 		() => {
 			console.log('ChatMessage Observable..');
-			const observable = context.onMessage();
+			const observable = chatSocket.onMessage();
 			observable.subscribe((message: any) => {
 				setMessages([ ...messages, message ]);
 			});
@@ -51,8 +38,19 @@ const Chat = ({ name, room }: UserRoom) => {
 				console.log('ChatMessage Observable Cleanup..');
 			};
 		},
-		[ messages, context ]
+		[ messages, chatSocket ]
 	);
+
+	useEffect(() => {
+		chatHttp
+			.getMessages()
+			.then((res) => {
+				console.log(res);
+			})
+			.catch(({ response }) => {
+				console.log(response.data);
+			});
+	}, []);
 
 	const sendMessage = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
@@ -67,7 +65,7 @@ const Chat = ({ name, room }: UserRoom) => {
 			setInput('');
 
 			console.log('sending message: ' + JSON.stringify(messageDetails));
-			context.send(messageDetails);
+			chatSocket.send(messageDetails);
 		}
 	};
 
