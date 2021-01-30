@@ -28,29 +28,49 @@ const Chat = ({ name, room, chatSocket }: any) => {
 
 	useEffect(
 		() => {
+			if (chatSocket === null) return;
 			console.log('ChatMessage Observable..');
-			const observable = chatSocket.onMessage();
-			observable.subscribe((message: any) => {
-				setMessages([ ...messages, message ]);
+			const subscription = chatSocket.onMessage().subscribe((message: any) => {
+				console.log(message);
+				setMessages((prevMsgs) => [ ...prevMsgs, message ]);
+			});
+			return () => {
+				console.log('ChatMessage Observable Cleanup..');
+				subscription.unsubscribe();
+			};
+		},
+		[ chatSocket ]
+	);
+
+	useEffect(
+		() => {
+			if (chatSocket === null) return;
+			console.log('On Join Observable..');
+			const subscription = chatSocket.onJoin().subscribe((value: any) => {
+				console.log(value);
 			});
 			// TODO cleanup
 			return () => {
-				console.log('ChatMessage Observable Cleanup..');
+				console.log('On Join Observable Cleanup..');
+				subscription.unsubscribe();
 			};
 		},
-		[ messages, chatSocket ]
+		[ chatSocket ]
 	);
 
-	useEffect(() => {
-		chatHttp
-			.getMessages()
-			.then((res) => {
-				console.log(res);
-			})
-			.catch(({ response }) => {
-				console.log(response.data);
-			});
-	}, []);
+	useEffect(
+		() => {
+			chatHttp
+				.getMessages({ roomCode: room })
+				.then(({ data }) => {
+					setMessages((prevMsgs) => data.messages);
+				})
+				.catch(({ response }) => {
+					console.log(response.data);
+				});
+		},
+		[ room ]
+	);
 
 	const sendMessage = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();

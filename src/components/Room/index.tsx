@@ -10,9 +10,9 @@ import { useChat } from '../../context/ChatContext';
 const Room = ({ history }: any) => {
 	// TODO create ROOM interface
 	const username = localStorage.getItem('chat-app-username');
-	const roomCode = localStorage.getItem('chat-app-room-code');
 	const [ openModal, setOpenModal ] = useState(false);
 	const [ rooms, setRooms ]: Array<any> = useState([]);
+	const [ roomCode, setRoomCode ] = useState('');
 	const chatSocket = useChat();
 
 	useEffect(
@@ -25,9 +25,9 @@ const Room = ({ history }: any) => {
 					console.log(data);
 					setRooms(data.rooms);
 					if (data.rooms[0]) {
-						localStorage.setItem('chat-app-room-code', data.rooms[0].code);
+						setRoomCode(data.rooms[0].code);
 						data.rooms.forEach((room: any) => {
-							chatSocket.join({ name: username || '', room });
+							chatSocket.join({ name: username || '', room: room.code });
 						});
 					}
 				})
@@ -39,7 +39,7 @@ const Room = ({ history }: any) => {
 					}
 				});
 		},
-		[ history, chatSocket ]
+		[ history, username, chatSocket ]
 	);
 
 	const getCurrentRoom = () => {
@@ -51,7 +51,9 @@ const Room = ({ history }: any) => {
 	// TODO room parameter can be ROOM interface or boolean
 	const handleModalClose = (room: any) => {
 		if (room) {
+			console.log(room);
 			setRooms([ ...rooms, room ]);
+			setRoomCode(room.code);
 		}
 		setOpenModal(false);
 	};

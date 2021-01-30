@@ -24,7 +24,7 @@ export class SocketService {
 		this.socket.emit(ChatEvent.MESSAGE, message);
 	}
 
-	public onJoin(): Observable<UserRoom> {
+	public onJoin(): Observable<any> {
 		return fromEvent(this.socket, ChatEvent.JOIN);
 	}
 

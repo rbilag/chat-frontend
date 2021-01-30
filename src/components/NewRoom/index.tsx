@@ -20,7 +20,6 @@ function NewRoom({ history, onClose, open, chatSocket, username }: any) {
 				if (data) {
 					console.log(data);
 					chatSocket.join({ name: username, room: data.room.code }, true);
-					localStorage.setItem('chat-app-room-code', data.room.code);
 					handleClose(data.room);
 				}
 			} catch (e) {

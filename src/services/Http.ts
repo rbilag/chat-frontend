@@ -88,10 +88,10 @@ const getRooms = async () => {
 	});
 };
 
-const getMessages = async () => {
+const getMessages = async (data: any) => {
 	return new Promise<any>(async (resolve, reject) => {
 		try {
-			const response = await axios.get('/messages');
+			const response = await axios.post('/messages', data);
 			resolve(response.data);
 		} catch (error) {
 			reject(error);
