@@ -48,6 +48,12 @@ const Room = ({ history }: any) => {
 		});
 	};
 
+	const handleRoomLeave = (code: string) => {
+		setRoomCode('');
+		setRooms(rooms.filter((room: any) => room.code !== code));
+		chatSocket.leave({ name: username || '', room: code });
+	};
+
 	// TODO room parameter can be ROOM interface or boolean
 	const handleModalClose = (room: any) => {
 		if (room) {
@@ -71,7 +77,7 @@ const Room = ({ history }: any) => {
 			{roomCode ? (
 				<React.Fragment>
 					<Chat name={username!} room={roomCode!} chatSocket={chatSocket} />
-					<RoomDetails roomDetails={getCurrentRoom()} />
+					<RoomDetails roomDetails={getCurrentRoom()} onRoomLeave={handleRoomLeave} username={username} />
 				</React.Fragment>
 			) : (
 				<div className="chat chat--no-room">

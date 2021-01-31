@@ -15,17 +15,6 @@ const Chat = ({ name, room, chatSocket }: any) => {
 
 	console.log(messages);
 
-	// const leaveChatRoom = () => {
-	// 	chatHttp
-	// 		.leaveRoom({ nickname: name, roomCode: room })
-	// 		.then((res) => {
-	// 			console.log(res);
-	// 		})
-	// 		.catch(({ response }) => {
-	// 			console.log(response.data);
-	// 		});
-	// };
-
 	useEffect(
 		() => {
 			if (chatSocket === null) return;

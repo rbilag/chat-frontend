@@ -88,6 +88,17 @@ const getRooms = async () => {
 	});
 };
 
+const deleteRoom = async (data: any) => {
+	return new Promise<any>(async (resolve, reject) => {
+		try {
+			const response = await axios.post('/rooms/delete', data);
+			resolve(response.data);
+		} catch (error) {
+			reject(error);
+		}
+	});
+};
+
 const getMessages = async (data: any) => {
 	return new Promise<any>(async (resolve, reject) => {
 		try {
@@ -108,7 +119,8 @@ const chatHttp = {
 	joinRoom,
 	leaveRoom,
 	getRooms,
-	getMessages
+	getMessages,
+	deleteRoom
 };
 
 export default chatHttp;

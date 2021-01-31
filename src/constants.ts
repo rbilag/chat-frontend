@@ -3,6 +3,7 @@ export enum ChatEvent {
 	DISCONNECT = 'disconnect',
 	JOIN = 'join',
 	MESSAGE = 'message',
+	LEAVE = 'leave',
 	SYSTEM = 'system'
 }
 export enum MessageStatus {
