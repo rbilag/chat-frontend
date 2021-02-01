@@ -32,6 +32,9 @@ export class SocketService {
 	public onJoin(): Observable<any> {
 		return fromEvent(this.socket, ChatEvent.JOIN);
 	}
+	public onRoomDelete(): Observable<any> {
+		return fromEvent(this.socket, ChatEvent.ROOM_DELETE);
+	}
 
 	public onLeave(): Observable<any> {
 		return fromEvent(this.socket, ChatEvent.LEAVE);

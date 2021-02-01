@@ -23,40 +23,20 @@ function RoomDetails({ roomDetails, onRoomLeave, username }: any) {
 		}
 	};
 
-	const handleModalClose = (willProceed: boolean) => {
-		setIsOpen(false);
-		if (willProceed) {
-			if (type === 'Leave') {
-				leaveChatRoom();
-			} else {
-				deleteChatRoom();
+	const handleModalClose = async (willProceed: boolean) => {
+		try {
+			setIsOpen(false);
+			if (willProceed) {
+				if (type === 'Leave') {
+					await chatHttp.leaveRoom({ roomCode: code });
+					onRoomLeave(code);
+				} else {
+					await chatHttp.deleteRoom({ roomCode: code });
+				}
 			}
+		} catch (e) {
+			console.log(e.response.data);
 		}
-	};
-
-	const leaveChatRoom = () => {
-		chatHttp
-			.leaveRoom({ roomCode: code })
-			.then((res) => {
-				console.log(res);
-				onRoomLeave(code);
-			})
-			.catch(({ response }) => {
-				console.log(response.data);
-			});
-	};
-
-	const deleteChatRoom = () => {
-		chatHttp
-			.deleteRoom({ roomCode: code })
-			.then((res) => {
-				console.log(res);
-				// TODO open alert
-				// onRoomLeave(code);
-			})
-			.catch(({ response }) => {
-				console.log(response.data);
-			});
 	};
 
 	return (

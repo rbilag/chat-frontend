@@ -33,22 +33,6 @@ const Chat = ({ name, room, chatSocket }: any) => {
 
 	useEffect(
 		() => {
-			if (chatSocket === null) return;
-			console.log('On Join Observable..');
-			const subscription = chatSocket.onJoin().subscribe((value: any) => {
-				console.log(value);
-			});
-			// TODO cleanup
-			return () => {
-				console.log('On Join Observable Cleanup..');
-				subscription.unsubscribe();
-			};
-		},
-		[ chatSocket ]
-	);
-
-	useEffect(
-		() => {
 			chatHttp
 				.getMessages({ roomCode: room })
 				.then(({ data }) => {

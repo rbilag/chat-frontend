@@ -4,7 +4,7 @@ export enum ChatEvent {
 	JOIN = 'join',
 	MESSAGE = 'message',
 	LEAVE = 'leave',
-	SYSTEM = 'system'
+	ROOM_DELETE = 'room delete'
 }
 export enum MessageStatus {
 	SENT = 'sent',
