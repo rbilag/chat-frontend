@@ -7,6 +7,9 @@ import chatHttp from '../../services/Http';
 import RoomDetails from '../RoomDetails';
 import { useChat } from '../../context/ChatContext';
 import GeneralSnackbar from '../GeneralSnackbar';
+import messageAudio from '../../assets/audio/message.mp3';
+
+const audio = new Audio(messageAudio);
 
 const Room = ({ history }: any) => {
 	// TODO create ROOM interface
@@ -35,20 +38,18 @@ const Room = ({ history }: any) => {
 					}
 				})
 				.catch(({ response }) => {
-					console.log(response);
 					if (response.status === 401) {
 						localStorage.clear();
 						history.push('/login');
 					}
 				});
 		},
-		[ history, username, chatSocket ]
+		[ history, chatSocket, username ]
 	);
 
 	useEffect(
 		() => {
 			if (chatSocket === null) return;
-			console.log('On Room Deleted Observable..');
 			const subscription = chatSocket.onRoomDelete().subscribe((deletedRoom: string) => {
 				snackbarMsg.current = `Room ${deletedRoom} has been deleted.`;
 				setOpenSnackbar(true);
@@ -56,7 +57,6 @@ const Room = ({ history }: any) => {
 				setRooms((prevRooms: any) => prevRooms.filter((room: any) => room.code !== deletedRoom));
 			});
 			return () => {
-				console.log('On Room Deleted Observable Cleanup..');
 				subscription.unsubscribe();
 			};
 		},
@@ -66,18 +66,40 @@ const Room = ({ history }: any) => {
 	useEffect(
 		() => {
 			if (chatSocket === null) return;
-			console.log('On Join Observable..');
-			const subscription = chatSocket.onJoin().subscribe((userDetails: any) => {
-				console.log(userDetails);
-				// TODO fix
-				// setRooms((prevRooms: any) => {
-				// 	const userIndex = prevRooms.indexOf((room: any) => room.code === roomCode);
-				// 	prevRooms[userIndex].users.push(userDetails);
-				// 	return prevRooms;
-				// });
+			const subscription = chatSocket.onJoin().subscribe(({ userDetails }: any) => {
+				setRooms((prevRooms: any) => {
+					const newRooms = [ ...prevRooms ];
+					const userIndex = newRooms.findIndex((room: any) => room.code === roomCode);
+					if (userIndex >= 0) newRooms[userIndex].users.push(userDetails);
+					return newRooms;
+				});
 			});
 			return () => {
-				console.log('On Join Observable Cleanup..');
+				subscription.unsubscribe();
+			};
+		},
+		[ chatSocket, roomCode ]
+	);
+
+	//TODO add chatSocket.onLeave().subscribe
+	// remove from chat member list
+
+	useEffect(
+		() => {
+			if (chatSocket === null) return;
+			const subscription = chatSocket.onMessage().subscribe((message: any) => {
+				if (message.roomCode !== roomCode) {
+					setRooms((prevRooms: any) => {
+						const newRooms = [ ...prevRooms ];
+						const userIndex = newRooms.findIndex((room: any) => room.code === message.roomCode);
+						if (userIndex >= 0)
+							newRooms[userIndex].unread = newRooms[userIndex].unread ? ++newRooms[userIndex].unread : 1;
+						return newRooms;
+					});
+					audio.play();
+				}
+			});
+			return () => {
 				subscription.unsubscribe();
 			};
 		},
@@ -85,8 +107,16 @@ const Room = ({ history }: any) => {
 	);
 
 	const getCurrentRoom = () => {
-		return rooms.find((room: any) => {
-			return room.code === roomCode;
+		return rooms.find((room: any) => room.code === roomCode);
+	};
+
+	const handleRoomClick = (code: string) => {
+		setRoomCode(code);
+		setRooms((prevRooms: any) => {
+			const newRooms = [ ...prevRooms ];
+			const userIndex = newRooms.findIndex((room: any) => room.code === code);
+			newRooms[userIndex].unread = 0;
+			return newRooms;
 		});
 	};
 
@@ -116,19 +146,13 @@ const Room = ({ history }: any) => {
 				onNewRoom={() => setOpenModal(true)}
 				rooms={rooms}
 				history={history}
-				chatSocket={chatSocket}
 				name={username!}
-				room={roomCode!}
+				onRoomClick={handleRoomClick}
 			/>
 			{roomCode ? (
 				<React.Fragment>
-					<Chat name={username!} room={roomCode!} chatSocket={chatSocket} />
-					<RoomDetails
-						roomDetails={getCurrentRoom()}
-						onRoomLeave={handleRoomLeave}
-						chatSocket={chatSocket}
-						username={username}
-					/>
+					<Chat name={username!} room={roomCode} />
+					<RoomDetails roomDetails={getCurrentRoom()} onRoomLeave={handleRoomLeave} username={username} />
 				</React.Fragment>
 			) : (
 				<div className="chat chat--no-room">
@@ -139,7 +163,7 @@ const Room = ({ history }: any) => {
 				</div>
 			)}
 
-			<NewRoom open={openModal} onClose={handleModalClose} chatSocket={chatSocket} username={username} />
+			<NewRoom open={openModal} onClose={handleModalClose} username={username} />
 			<GeneralSnackbar message={snackbarMsg.current} open={openSnackbar} onClose={handleSnackbarClose} />
 		</div>
 	);

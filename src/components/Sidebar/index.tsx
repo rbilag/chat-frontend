@@ -6,10 +6,11 @@ import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import SidebarRoom from '../SidebarRooms';
 import chatHttp from '../../services/Http';
+import { useChat } from '../../context/ChatContext';
 
-const Sidebar = ({ onNewRoom, rooms, history, chatSocket, name }: any) => {
+const Sidebar = ({ onNewRoom, rooms, history, onRoomClick }: any) => {
 	const [ anchorEl, setAnchorEl ] = React.useState<null | HTMLElement>(null);
-	// TODO add on create room listener
+	const chatSocket = useChat();
 
 	const onLogout = () => {
 		setAnchorEl(null);
@@ -54,7 +55,9 @@ const Sidebar = ({ onNewRoom, rooms, history, chatSocket, name }: any) => {
 					<input type="text" placeholder="Search or start new chat" />
 				</div>
 			</div>
-			<div className="sidebar__rooms">{rooms.map((room: any, i: number) => <SidebarRoom key={i} room={room} />)}</div>
+			<div className="sidebar__rooms">
+				{rooms.map((room: any, i: number) => <SidebarRoom key={i} room={room} onRoomClick={onRoomClick} />)}
+			</div>
 		</div>
 	);
 };

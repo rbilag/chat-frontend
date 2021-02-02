@@ -25,3 +25,15 @@
 .sidebarRoom__details > p {
 	color: #8a8a8a;
 }
+
+.sidebarRoom__unread p {
+	padding: 0.25rem;
+	width: 1rem;
+	height: 1rem;
+	font-size: 0.75rem;
+	background: #599828;
+	border-radius: 50%;
+	color: #fff;
+	text-align: center;
+	margin: auto;
+}

@@ -8,27 +8,26 @@ import './style.css';
 import { ChatMessage } from '../../types';
 import chatHttp from '../../services/Http';
 import { parseISO, differenceInCalendarDays, format, formatDistanceToNow } from 'date-fns';
+import { useChat } from '../../context/ChatContext';
 
-const Chat = ({ name, room, chatSocket }: any) => {
+const Chat = ({ name, room }: any) => {
 	const [ messages, setMessages ] = useState([] as any[]);
 	const [ input, setInput ] = useState('');
-
-	console.log(messages);
+	const chatSocket = useChat();
 
 	useEffect(
 		() => {
 			if (chatSocket === null) return;
-			console.log('ChatMessage Observable..');
 			const subscription = chatSocket.onMessage().subscribe((message: any) => {
-				console.log(message);
-				setMessages((prevMsgs) => [ ...prevMsgs, message ]);
+				if (message.roomCode === room) {
+					setMessages((prevMsgs) => [ ...prevMsgs, message ]);
+				}
 			});
 			return () => {
-				console.log('ChatMessage Observable Cleanup..');
 				subscription.unsubscribe();
 			};
 		},
-		[ chatSocket ]
+		[ chatSocket, room ]
 	);
 
 	useEffect(
@@ -91,7 +90,7 @@ const Chat = ({ name, room, chatSocket }: any) => {
 				</div>
 			</div>
 			<div className="chat__body">
-				{/* TODO status, dateFormat  */}
+				{/* TODO status  */}
 				{messages.map(({ content, user, createdAt }: any, i) => {
 					return (
 						<p

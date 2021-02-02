@@ -39,6 +39,15 @@ function RoomDetails({ roomDetails, onRoomLeave, username }: any) {
 		}
 	};
 
+	const generateUserList = () => {
+		return users.map(({ firstName, lastName, username }: any) => (
+			<tr key={username}>
+				<td>{`${firstName} ${lastName}`}</td>
+				<td>{username}</td>
+			</tr>
+		));
+	};
+
 	return (
 		<div className="room-details">
 			<h1>{code}</h1>
@@ -53,16 +62,7 @@ function RoomDetails({ roomDetails, onRoomLeave, username }: any) {
 						<th>Username</th>
 					</tr>
 				</thead>
-				<tbody>
-					{users.map(({ firstName, lastName, username }: any) => {
-						return (
-							<tr key={username}>
-								<td>{`${firstName} ${lastName}`}</td>
-								<td>{username}</td>
-							</tr>
-						);
-					})}
-				</tbody>
+				<tbody>{generateUserList()}</tbody>
 			</table>
 
 			<Button

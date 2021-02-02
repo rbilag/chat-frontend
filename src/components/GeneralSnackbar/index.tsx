@@ -4,8 +4,6 @@ import React from 'react';
 import './style.css';
 
 function GeneralSnackbar({ message, open, onClose }: any) {
-	console.log(message);
-
 	const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
 		if (reason === 'clickaway') {
 			return;

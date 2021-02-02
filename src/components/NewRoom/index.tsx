@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Button, ButtonGroup, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
 import chatHttp from '../../services/Http';
 import './style.css';
+import { useChat } from '../../context/ChatContext';
 
-function NewRoom({ history, onClose, open, chatSocket, username }: any) {
+function NewRoom({ onClose, open, username }: any) {
 	const [ isNew, setisNew ] = useState(true);
 	const [ description, setDescription ] = useState('');
 	const [ roomCode, setRoomCode ] = useState('');
+	const chatSocket = useChat();
 
 	const handleClose = (val = false) => {
 		onClose(val);
