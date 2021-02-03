@@ -50,44 +50,44 @@ const Room = ({ history }: any) => {
 	useEffect(
 		() => {
 			if (chatSocket === null) return;
-			const subscription = chatSocket.onRoomDelete().subscribe((deletedRoom: string) => {
+			const joinSubscription = chatSocket.onJoin().subscribe(({ userDetails, joinedRoom }: any) => {
+				setRooms((prevRooms: any) => {
+					const newRooms = [ ...prevRooms ];
+					const userIndex = newRooms.findIndex((room: any) => room.code === joinedRoom);
+					if (userIndex >= 0) newRooms[userIndex].users.push(userDetails);
+					return newRooms;
+				});
+			});
+			const leaveSubscription = chatSocket.onLeave().subscribe(({ userDetails, leftRoom }: any) => {
+				setRooms((prevRooms: any) => {
+					const newRooms = [ ...prevRooms ];
+					const userIndex = newRooms.findIndex((room: any) => room.code === leftRoom);
+					if (userIndex >= 0) {
+						newRooms[userIndex].users = newRooms[userIndex].users.filter(
+							(user: any) => user.username !== userDetails.username
+						);
+					}
+					return newRooms;
+				});
+			});
+			return () => {
+				joinSubscription.unsubscribe();
+				leaveSubscription.unsubscribe();
+			};
+		},
+		[ chatSocket ]
+	);
+
+	useEffect(
+		() => {
+			if (chatSocket === null) return;
+			const deleteSubscription = chatSocket.onRoomDelete().subscribe((deletedRoom: string) => {
 				snackbarMsg.current = `Room ${deletedRoom} has been deleted.`;
 				setOpenSnackbar(true);
 				if (roomCode === deletedRoom) setRoomCode((roomCode) => '');
 				setRooms((prevRooms: any) => prevRooms.filter((room: any) => room.code !== deletedRoom));
 			});
-			return () => {
-				subscription.unsubscribe();
-			};
-		},
-		[ chatSocket, roomCode ]
-	);
-
-	useEffect(
-		() => {
-			if (chatSocket === null) return;
-			const subscription = chatSocket.onJoin().subscribe(({ userDetails }: any) => {
-				setRooms((prevRooms: any) => {
-					const newRooms = [ ...prevRooms ];
-					const userIndex = newRooms.findIndex((room: any) => room.code === roomCode);
-					if (userIndex >= 0) newRooms[userIndex].users.push(userDetails);
-					return newRooms;
-				});
-			});
-			return () => {
-				subscription.unsubscribe();
-			};
-		},
-		[ chatSocket, roomCode ]
-	);
-
-	//TODO add chatSocket.onLeave().subscribe
-	// remove from chat member list
-
-	useEffect(
-		() => {
-			if (chatSocket === null) return;
-			const subscription = chatSocket.onMessage().subscribe((message: any) => {
+			const messageSubscription = chatSocket.onMessage().subscribe((message: any) => {
 				if (message.roomCode !== roomCode) {
 					setRooms((prevRooms: any) => {
 						const newRooms = [ ...prevRooms ];
@@ -100,7 +100,8 @@ const Room = ({ history }: any) => {
 				}
 			});
 			return () => {
-				subscription.unsubscribe();
+				deleteSubscription.unsubscribe();
+				messageSubscription.unsubscribe();
 			};
 		},
 		[ chatSocket, roomCode ]
@@ -123,13 +124,11 @@ const Room = ({ history }: any) => {
 	const handleRoomLeave = (code: string) => {
 		setRoomCode('');
 		setRooms(rooms.filter((room: any) => room.code !== code));
-		chatSocket.leave({ name: username || '', room: code });
 	};
 
 	// TODO room parameter can be ROOM interface or boolean
 	const handleModalClose = (room: any) => {
 		if (room) {
-			console.log(room);
 			setRooms([ ...rooms, room ]);
 			setRoomCode(room.code);
 		}
@@ -158,7 +157,9 @@ const Room = ({ history }: any) => {
 				<div className="chat chat--no-room">
 					<div className="chat__header" />
 					<div className="chat__body">
-						<p>Create or Join a room to start a conversation!</p>
+						<p>
+							{rooms.length > 0 ? 'Click a room to start chatting!' : 'Create or Join a room to start a conversation!'}
+						</p>
 					</div>
 				</div>
 			)}

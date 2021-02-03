@@ -24,20 +24,16 @@ export class SocketService {
 		this.socket.emit(ChatEvent.MESSAGE, message);
 	}
 
-	public leave(userRoom: UserRoom): void {
-		console.log(`${userRoom.name} left ${userRoom.room}`);
-		this.socket.emit(ChatEvent.LEAVE, { userRoom });
-	}
-
 	public onJoin(): Observable<any> {
 		return fromEvent(this.socket, ChatEvent.JOIN);
-	}
-	public onRoomDelete(): Observable<any> {
-		return fromEvent(this.socket, ChatEvent.ROOM_DELETE);
 	}
 
 	public onLeave(): Observable<any> {
 		return fromEvent(this.socket, ChatEvent.LEAVE);
+	}
+
+	public onRoomDelete(): Observable<any> {
+		return fromEvent(this.socket, ChatEvent.ROOM_DELETE);
 	}
 
 	public onMessage(): Observable<any> {

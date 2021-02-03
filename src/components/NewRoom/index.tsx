@@ -22,6 +22,9 @@ function NewRoom({ onClose, open, username }: any) {
 				if (data) {
 					console.log(data);
 					chatSocket.join({ name: username, room: data.room.code }, true);
+					setisNew(true);
+					setDescription('');
+					setRoomCode('');
 					handleClose(data.room);
 				}
 			} catch (e) {
