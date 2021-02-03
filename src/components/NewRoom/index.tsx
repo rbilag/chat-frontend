@@ -3,14 +3,22 @@ import { Button, ButtonGroup, Dialog, DialogTitle, DialogContent } from '@materi
 import chatHttp from '../../services/Http';
 import './style.css';
 import { useChat } from '../../context/ChatContext';
+import { useUser } from '../../context/UserContext';
+import { RoomPopulated } from '../../types';
 
-function NewRoom({ onClose, open, username }: any) {
+export interface NewRoomProps {
+	open: boolean;
+	onClose: (value: null | RoomPopulated) => void;
+}
+
+function NewRoom({ open, onClose }: NewRoomProps) {
 	const [ isNew, setisNew ] = useState(true);
 	const [ description, setDescription ] = useState('');
 	const [ roomCode, setRoomCode ] = useState('');
 	const chatSocket = useChat();
+	const [ loggedInUser ] = useUser();
 
-	const handleClose = (val = false) => {
+	const handleClose = (val: null | RoomPopulated) => {
 		onClose(val);
 	};
 
@@ -20,8 +28,7 @@ function NewRoom({ onClose, open, username }: any) {
 			try {
 				let { data } = isNew ? await chatHttp.createRoom({ description }) : await chatHttp.joinRoom({ roomCode });
 				if (data) {
-					console.log(data);
-					chatSocket.join({ name: username, room: data.room.code }, true);
+					chatSocket.join({ name: loggedInUser.username, room: data.room.code }, true);
 					setisNew(true);
 					setDescription('');
 					setRoomCode('');
@@ -34,7 +41,7 @@ function NewRoom({ onClose, open, username }: any) {
 	};
 
 	return (
-		<Dialog onClose={() => handleClose()} aria-labelledby="new-room-dialog" open={open} className="newRoom">
+		<Dialog onClose={() => handleClose(null)} aria-labelledby="new-room-dialog" open={open} className="newRoom">
 			<DialogTitle id="new-room-dialog">New Room</DialogTitle>
 			<DialogContent className="newRoom__content">
 				<form>

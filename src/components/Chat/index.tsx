@@ -1,25 +1,33 @@
 import { IconButton } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
 import SendIcon from '@material-ui/icons/Send';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import MoodIcon from '@material-ui/icons/Mood';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './style.css';
-import { ChatMessage } from '../../types';
+import { ChatMessage, MessagePopulated } from '../../types';
 import chatHttp from '../../services/Http';
 import { parseISO, differenceInCalendarDays, format, formatDistanceToNow } from 'date-fns';
 import { useChat } from '../../context/ChatContext';
+import { useUser } from '../../context/UserContext';
 
-const Chat = ({ name, room }: any) => {
-	const [ messages, setMessages ] = useState([] as any[]);
+export interface ChatProps {
+	roomCode: string;
+}
+
+const Chat = ({ roomCode }: ChatProps) => {
+	const [ messages, setMessages ] = useState([] as MessagePopulated[]);
 	const [ input, setInput ] = useState('');
 	const chatSocket = useChat();
+	const [ loggedInUser ] = useUser();
+	const setRef = useCallback((node) => {
+		if (node) {
+			node.scrollIntoView({ smooth: true });
+		}
+	}, []);
 
 	useEffect(
 		() => {
 			if (chatSocket === null) return;
-			const subscription = chatSocket.onMessage().subscribe((message: any) => {
-				if (message.roomCode === room) {
+			const subscription = chatSocket.onMessage().subscribe((message: MessagePopulated) => {
+				if (message.roomCode === roomCode) {
 					setMessages((prevMsgs) => [ ...prevMsgs, message ]);
 				}
 			});
@@ -27,13 +35,13 @@ const Chat = ({ name, room }: any) => {
 				subscription.unsubscribe();
 			};
 		},
-		[ chatSocket, room ]
+		[ chatSocket, roomCode ]
 	);
 
 	useEffect(
 		() => {
 			chatHttp
-				.getMessages({ roomCode: room })
+				.getMessages({ roomCode })
 				.then(({ data }) => {
 					setMessages((prevMsgs) => data.messages);
 				})
@@ -41,7 +49,7 @@ const Chat = ({ name, room }: any) => {
 					console.log(response.data);
 				});
 		},
-		[ room ]
+		[ roomCode ]
 	);
 
 	const sendMessage = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -49,8 +57,8 @@ const Chat = ({ name, room }: any) => {
 		if (input) {
 			const messageDetails: ChatMessage = {
 				userRoom: {
-					name,
-					room
+					name: loggedInUser.username,
+					room: roomCode
 				},
 				content: input
 			};
@@ -71,7 +79,7 @@ const Chat = ({ name, room }: any) => {
 		<div className="chat">
 			<div className="chat__header">
 				<div className="chat__headerInfo">
-					<h3>Room {room}</h3>
+					<h3>Room {roomCode}</h3>
 					<p>
 						{messages.length > 0 ? (
 							'Last activity ' + formatDate(parseISO(messages[messages.length - 1].createdAt))
@@ -81,24 +89,27 @@ const Chat = ({ name, room }: any) => {
 					</p>
 				</div>
 				<div className="chat__headerIcons">
-					<IconButton>
+					{/* TODO future implementation */}
+					{/* <IconButton>
 						<SearchIcon />
 					</IconButton>
 					<IconButton>
 						<MoreVertIcon />
-					</IconButton>
+					</IconButton> */}
 				</div>
 			</div>
 			<div className="chat__body">
 				{/* TODO status  */}
-				{messages.map(({ content, user, createdAt }: any, i) => {
+				{messages.map(({ content, user, createdAt }, i) => {
+					const lastMessage = messages.length - 1 === i;
 					return (
 						<p
 							key={i}
-							className={`chat__message ${name === user.username && 'chat__message--sender'} ${user.username ===
-								'Chatbot' && 'chat__message--bot'}`}
+							ref={lastMessage ? setRef : null}
+							className={`chat__message ${loggedInUser.username === user.username &&
+								'chat__message--sender'} ${user.username === 'Chatbot' && 'chat__message--bot'}`}
 						>
-							<span className="chat__person">{name === user.username ? 'You' : user.username}</span>
+							<span className="chat__person">{loggedInUser.username === user.username ? 'You' : user.username}</span>
 							{content}
 							<span className="chat__timestamp">{formatDate(parseISO(createdAt))}</span>
 						</p>
@@ -106,9 +117,9 @@ const Chat = ({ name, room }: any) => {
 				})}
 			</div>
 			<div className="chat__footer">
-				<IconButton>
+				{/* <IconButton>
 					<MoodIcon />
-				</IconButton>
+				</IconButton> */}
 				<form>
 					<input value={input} onChange={(e) => setInput(e.target.value)} type="text" placeholder="Start typing.." />
 					<button onClick={sendMessage} type="submit">

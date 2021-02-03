@@ -39,7 +39,9 @@
 	margin-left: 0.8rem;
 }
 .sidebar__rooms {
-	height: calc(100vh - 7.58rem);
+	/* TODO revert if has search func */
+	/* height: calc(100vh - 7.58rem); */
+	height: calc(100vh - 3.67rem);
 	background-color: white;
 	overflow-y: scroll;
 }

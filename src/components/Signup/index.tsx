@@ -3,8 +3,13 @@ import { DebounceInput } from 'react-debounce-input';
 import { Button } from '@material-ui/core';
 import chatHttp from '../../services/Http';
 import './style.css';
+import { useHistory } from 'react-router-dom';
 
-function SignUp({ history }: any) {
+export interface SignUpProps {
+	history: ReturnType<typeof useHistory>;
+}
+
+function SignUp({ history }: SignUpProps) {
 	const [ username, setUsername ] = useState('');
 	const [ email, setEmail ] = useState('');
 	const [ isAvailable, setIsAvailable ] = useState({ email: true, username: true });

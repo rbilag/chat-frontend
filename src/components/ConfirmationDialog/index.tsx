@@ -2,7 +2,13 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import React from 'react';
 import './style.css';
 
-function ConfirmationDialog({ content, open, onClose }: any) {
+export interface ConfirmationDialogProps {
+	content: string;
+	open: boolean;
+	onClose: (willProceed: boolean) => void;
+}
+
+function ConfirmationDialog({ content, open, onClose }: ConfirmationDialogProps) {
 	return (
 		<Dialog
 			open={open}

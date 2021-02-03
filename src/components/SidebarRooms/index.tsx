@@ -1,7 +1,13 @@
 import React from 'react';
+import { RoomPopulated } from '../../types';
 import './style.css';
 
-const SidebarRoom = ({ room, onRoomClick }: any) => {
+export interface SidebarRoomProps {
+	room: RoomPopulated;
+	onRoomClick: (code: string) => void;
+}
+
+const SidebarRoom = ({ room, onRoomClick }: SidebarRoomProps) => {
 	return (
 		<div className="sidebarRoom" onClick={() => onRoomClick(room.code)}>
 			<div className="sidebarRoom__details">

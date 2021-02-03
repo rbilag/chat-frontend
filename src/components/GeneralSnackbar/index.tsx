@@ -3,8 +3,15 @@ import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 import './style.css';
 
-function GeneralSnackbar({ message, open, onClose }: any) {
+export interface GeneralSnackbarProps {
+	message: string;
+	open: boolean;
+	onClose: () => void;
+}
+
+function GeneralSnackbar({ message, open, onClose }: GeneralSnackbarProps) {
 	const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+		console.log(reason);
 		if (reason === 'clickaway') {
 			return;
 		}

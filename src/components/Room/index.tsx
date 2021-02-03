@@ -8,16 +8,23 @@ import RoomDetails from '../RoomDetails';
 import { useChat } from '../../context/ChatContext';
 import GeneralSnackbar from '../GeneralSnackbar';
 import messageAudio from '../../assets/audio/message.mp3';
+import { useUser } from '../../context/UserContext';
+import { USER_INITIAL_VALUE } from '../../constants';
+import { useHistory } from 'react-router-dom';
+import { JoinEventResp, LeaveEventResp, MessagePopulated, RoomPopulated, User } from '../../types';
+
+export interface RoomProps {
+	history: ReturnType<typeof useHistory>;
+}
 
 const audio = new Audio(messageAudio);
 
-const Room = ({ history }: any) => {
-	// TODO create ROOM interface
-	const username = localStorage.getItem('chat-app-username');
+const Room = ({ history }: RoomProps) => {
+	const [ loggedInUser, setLoggedInUser ] = useUser();
 	const [ openModal, setOpenModal ] = useState(false);
 	const [ openSnackbar, setOpenSnackbar ] = useState(false);
 	const snackbarMsg = useRef('');
-	const [ rooms, setRooms ]: Array<any> = useState([]);
+	const [ rooms, setRooms ] = useState([] as RoomPopulated[]);
 	const [ roomCode, setRoomCode ] = useState('');
 	const chatSocket = useChat();
 
@@ -28,43 +35,43 @@ const Room = ({ history }: any) => {
 			chatHttp
 				.getRooms()
 				.then(({ data }) => {
-					console.log(data);
 					setRooms(data.rooms);
 					if (data.rooms[0]) {
 						setRoomCode(data.rooms[0].code);
-						data.rooms.forEach((room: any) => {
-							chatSocket.join({ name: username || '', room: room.code });
+						data.rooms.forEach((room: RoomPopulated) => {
+							chatSocket.join({ name: loggedInUser.username || '', room: room.code });
 						});
 					}
 				})
 				.catch(({ response }) => {
 					if (response.status === 401) {
 						localStorage.clear();
+						setLoggedInUser(USER_INITIAL_VALUE);
 						history.push('/login');
 					}
 				});
 		},
-		[ history, chatSocket, username ]
+		[ history, chatSocket, loggedInUser.username, setLoggedInUser ]
 	);
 
 	useEffect(
 		() => {
 			if (chatSocket === null) return;
-			const joinSubscription = chatSocket.onJoin().subscribe(({ userDetails, joinedRoom }: any) => {
-				setRooms((prevRooms: any) => {
+			const joinSubscription = chatSocket.onJoin().subscribe(({ userDetails, joinedRoom }: JoinEventResp) => {
+				setRooms((prevRooms: RoomPopulated[]) => {
 					const newRooms = [ ...prevRooms ];
-					const userIndex = newRooms.findIndex((room: any) => room.code === joinedRoom);
+					const userIndex = newRooms.findIndex((room: RoomPopulated) => room.code === joinedRoom);
 					if (userIndex >= 0) newRooms[userIndex].users.push(userDetails);
 					return newRooms;
 				});
 			});
-			const leaveSubscription = chatSocket.onLeave().subscribe(({ userDetails, leftRoom }: any) => {
-				setRooms((prevRooms: any) => {
+			const leaveSubscription = chatSocket.onLeave().subscribe(({ userDetails, leftRoom }: LeaveEventResp) => {
+				setRooms((prevRooms: RoomPopulated[]) => {
 					const newRooms = [ ...prevRooms ];
-					const userIndex = newRooms.findIndex((room: any) => room.code === leftRoom);
+					const userIndex = newRooms.findIndex((room: RoomPopulated) => room.code === leftRoom);
 					if (userIndex >= 0) {
 						newRooms[userIndex].users = newRooms[userIndex].users.filter(
-							(user: any) => user.username !== userDetails.username
+							(user: User) => user.username !== userDetails.username
 						);
 					}
 					return newRooms;
@@ -85,13 +92,13 @@ const Room = ({ history }: any) => {
 				snackbarMsg.current = `Room ${deletedRoom} has been deleted.`;
 				setOpenSnackbar(true);
 				if (roomCode === deletedRoom) setRoomCode((roomCode) => '');
-				setRooms((prevRooms: any) => prevRooms.filter((room: any) => room.code !== deletedRoom));
+				setRooms((prevRooms: RoomPopulated[]) => prevRooms.filter((room: RoomPopulated) => room.code !== deletedRoom));
 			});
-			const messageSubscription = chatSocket.onMessage().subscribe((message: any) => {
+			const messageSubscription = chatSocket.onMessage().subscribe((message: MessagePopulated) => {
 				if (message.roomCode !== roomCode) {
-					setRooms((prevRooms: any) => {
+					setRooms((prevRooms: RoomPopulated[]) => {
 						const newRooms = [ ...prevRooms ];
-						const userIndex = newRooms.findIndex((room: any) => room.code === message.roomCode);
+						const userIndex = newRooms.findIndex((room: RoomPopulated) => room.code === message.roomCode);
 						if (userIndex >= 0)
 							newRooms[userIndex].unread = newRooms[userIndex].unread ? ++newRooms[userIndex].unread : 1;
 						return newRooms;
@@ -108,14 +115,14 @@ const Room = ({ history }: any) => {
 	);
 
 	const getCurrentRoom = () => {
-		return rooms.find((room: any) => room.code === roomCode);
+		return rooms.find((room: RoomPopulated) => room.code === roomCode);
 	};
 
 	const handleRoomClick = (code: string) => {
 		setRoomCode(code);
-		setRooms((prevRooms: any) => {
+		setRooms((prevRooms: RoomPopulated[]) => {
 			const newRooms = [ ...prevRooms ];
-			const userIndex = newRooms.findIndex((room: any) => room.code === code);
+			const userIndex = newRooms.findIndex((room: RoomPopulated) => room.code === code);
 			newRooms[userIndex].unread = 0;
 			return newRooms;
 		});
@@ -123,11 +130,10 @@ const Room = ({ history }: any) => {
 
 	const handleRoomLeave = (code: string) => {
 		setRoomCode('');
-		setRooms(rooms.filter((room: any) => room.code !== code));
+		setRooms(rooms.filter((room: RoomPopulated) => room.code !== code));
 	};
 
-	// TODO room parameter can be ROOM interface or boolean
-	const handleModalClose = (room: any) => {
+	const handleModalClose = (room: RoomPopulated | null) => {
 		if (room) {
 			setRooms([ ...rooms, room ]);
 			setRoomCode(room.code);
@@ -135,23 +141,13 @@ const Room = ({ history }: any) => {
 		setOpenModal(false);
 	};
 
-	const handleSnackbarClose = (room: any) => {
-		setOpenSnackbar(false);
-	};
-
 	return (
 		<div className="room">
-			<Sidebar
-				onNewRoom={() => setOpenModal(true)}
-				rooms={rooms}
-				history={history}
-				name={username!}
-				onRoomClick={handleRoomClick}
-			/>
+			<Sidebar onNewRoom={() => setOpenModal(true)} rooms={rooms} history={history} onRoomClick={handleRoomClick} />
 			{roomCode ? (
 				<React.Fragment>
-					<Chat name={username!} room={roomCode} />
-					<RoomDetails roomDetails={getCurrentRoom()} onRoomLeave={handleRoomLeave} username={username} />
+					<Chat roomCode={roomCode} />
+					<RoomDetails roomDetails={getCurrentRoom()!} onRoomLeave={handleRoomLeave} />
 				</React.Fragment>
 			) : (
 				<div className="chat chat--no-room">
@@ -164,8 +160,8 @@ const Room = ({ history }: any) => {
 				</div>
 			)}
 
-			<NewRoom open={openModal} onClose={handleModalClose} username={username} />
-			<GeneralSnackbar message={snackbarMsg.current} open={openSnackbar} onClose={handleSnackbarClose} />
+			<NewRoom open={openModal} onClose={handleModalClose} />
+			<GeneralSnackbar message={snackbarMsg.current} open={openSnackbar} onClose={() => setOpenSnackbar(false)} />
 		</div>
 	);
 };

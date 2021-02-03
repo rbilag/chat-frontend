@@ -13,3 +13,10 @@ export enum MessageStatus {
 	UNSENT = 'unsent',
 	ERROR = 'error'
 }
+
+export const USER_INITIAL_VALUE = {
+	username: '',
+	firstName: '',
+	lastName: '',
+	email: ''
+};

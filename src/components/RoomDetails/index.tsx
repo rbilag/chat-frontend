@@ -4,12 +4,20 @@ import { parseISO, format } from 'date-fns';
 import { Button } from '@material-ui/core';
 import ConfirmationDialog from '../ConfirmationDialog';
 import chatHttp from '../../services/Http';
+import { useUser } from '../../context/UserContext';
+import { RoomPopulated, User } from '../../types';
 
-function RoomDetails({ roomDetails, onRoomLeave, username }: any) {
+export interface RoomDetailsProps {
+	roomDetails: RoomPopulated;
+	onRoomLeave: (code: string) => void;
+}
+
+function RoomDetails({ roomDetails, onRoomLeave }: RoomDetailsProps) {
 	const { code, description, createdAt, users } = roomDetails;
 	const [ isOpen, setIsOpen ] = useState(false);
 	const [ content, setContent ] = useState('');
 	const [ type, setType ] = useState('Leave');
+	const [ loggedInUser ] = useUser();
 
 	const openDialog = (type: string) => {
 		setIsOpen(true);
@@ -40,7 +48,7 @@ function RoomDetails({ roomDetails, onRoomLeave, username }: any) {
 	};
 
 	const generateUserList = () => {
-		return users.map(({ firstName, lastName, username }: any) => (
+		return users.map(({ firstName, lastName, username }: User) => (
 			<tr key={username}>
 				<td>{`${firstName} ${lastName}`}</td>
 				<td>{username}</td>
@@ -76,7 +84,7 @@ function RoomDetails({ roomDetails, onRoomLeave, username }: any) {
 				Leave Room
 			</Button>
 
-			{users[0].username === username && (
+			{users[0].username === loggedInUser.username && (
 				<Button
 					onClick={() => openDialog('Delete')}
 					type="button"

@@ -1,7 +1,6 @@
-import { UserRoom } from './../types';
+import { UserRoom, LeaveEventResp, JoinEventResp, ChatMessage, MessagePopulated } from './../types';
 import { ChatEvent } from '../constants';
 import io from 'socket.io-client';
-import { ChatMessage } from '../types';
 import { fromEvent, Observable } from 'rxjs';
 
 export class SocketService {
@@ -9,7 +8,6 @@ export class SocketService {
 
 	public init(): SocketService {
 		console.log('Initializing Socket Service');
-		// , {query: `userId=${userId}`}
 		this.socket = io('localhost:8080');
 		return this;
 	}
@@ -24,19 +22,19 @@ export class SocketService {
 		this.socket.emit(ChatEvent.MESSAGE, message);
 	}
 
-	public onJoin(): Observable<any> {
+	public onJoin(): Observable<JoinEventResp> {
 		return fromEvent(this.socket, ChatEvent.JOIN);
 	}
 
-	public onLeave(): Observable<any> {
+	public onLeave(): Observable<LeaveEventResp> {
 		return fromEvent(this.socket, ChatEvent.LEAVE);
 	}
 
-	public onRoomDelete(): Observable<any> {
+	public onRoomDelete(): Observable<string> {
 		return fromEvent(this.socket, ChatEvent.ROOM_DELETE);
 	}
 
-	public onMessage(): Observable<any> {
+	public onMessage(): Observable<MessagePopulated> {
 		return fromEvent(this.socket, ChatEvent.MESSAGE);
 	}
 

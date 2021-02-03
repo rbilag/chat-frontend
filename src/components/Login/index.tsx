@@ -2,11 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@material-ui/core';
 import chatHttp from '../../services/Http';
 import './style.css';
+import { useUser } from '../../context/UserContext';
+import { useHistory } from 'react-router-dom';
 
-function Login({ history }: any) {
+export interface LoginProps {
+	history: ReturnType<typeof useHistory>;
+}
+function Login({ history }: LoginProps) {
 	const usernameRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
 	const [ errorMsg, setErrorMsg ] = useState('');
+	const [ user, setUser ] = useUser();
 
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
@@ -14,10 +20,10 @@ function Login({ history }: any) {
 			chatHttp
 				.login({ username: usernameRef.current.value, password: passwordRef.current.value })
 				.then(({ authorization, data }) => {
-					console.log(data);
 					setErrorMsg('');
 					localStorage.setItem('chat-app-auth', authorization);
-					localStorage.setItem('chat-app-username', data.username);
+					console.log(data);
+					setUser(data.userDetails);
 					history.push('/room');
 				})
 				.catch(({ response }) => {
@@ -40,13 +46,12 @@ function Login({ history }: any) {
 	useEffect(
 		() => {
 			const token = localStorage.getItem('chat-app-auth');
-			const username = localStorage.getItem('chat-app-username');
-			if (token && username) {
+			if (token && user.username) {
 				chatHttp.changeLoginStatus({ newValue: true });
 				history.push('/room');
 			}
 		},
-		[ history ]
+		[ history, user ]
 	);
 
 	return (
