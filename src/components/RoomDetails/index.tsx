@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import './style.css';
-import { parseISO, format } from 'date-fns';
-import { Button } from '@material-ui/core';
+import { Avatar, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText } from '@material-ui/core';
 import ConfirmationDialog from '../ConfirmationDialog';
 import chatHttp from '../../services/Http';
 import { useUser } from '../../context/UserContext';
+import PhotoIcon from '@material-ui/icons/Photo';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import DeleteIcon from '@material-ui/icons/Delete';
+import PersonIcon from '@material-ui/icons/Person';
 import { RoomPopulated, User } from '../../types';
 
 export interface RoomDetailsProps {
@@ -13,7 +16,7 @@ export interface RoomDetailsProps {
 }
 
 function RoomDetails({ roomDetails, onRoomLeave }: RoomDetailsProps) {
-	const { code, description, createdAt, users } = roomDetails;
+	const { code, description, users } = roomDetails;
 	const [ isOpen, setIsOpen ] = useState(false);
 	const [ content, setContent ] = useState('');
 	const [ type, setType ] = useState('Leave');
@@ -47,55 +50,44 @@ function RoomDetails({ roomDetails, onRoomLeave }: RoomDetailsProps) {
 		}
 	};
 
+	const generateOptions = () => {
+		const ROOM_OPTIONS = [
+			{ label: 'Change Group Photo', icon: <PhotoIcon />, adminOnly: false },
+			{ label: 'Leave Group', icon: <MeetingRoomIcon />, adminOnly: false, action: () => openDialog('Leave') },
+			{ label: 'Delete Group', icon: <DeleteIcon />, adminOnly: true, action: () => openDialog('Delete') }
+		];
+		return ROOM_OPTIONS.map(({ label, icon, adminOnly, action }, i) => {
+			return (
+				(!adminOnly || (adminOnly && users[0].username === loggedInUser.username)) && (
+					<ListItem key={i} button onClick={action}>
+						<ListItemIcon>{icon}</ListItemIcon>
+						<ListItemText primary={label} />
+					</ListItem>
+				)
+			);
+		});
+	};
+
 	const generateUserList = () => {
 		return users.map(({ firstName, lastName, username }: User) => (
-			<tr key={username}>
-				<td>{`${firstName} ${lastName}`}</td>
-				<td>{username}</td>
-			</tr>
+			<ListItem key={username}>
+				<ListItemAvatar>
+					<Avatar>
+						<PersonIcon />
+					</Avatar>
+				</ListItemAvatar>
+				<ListItemText primary={`${firstName} ${lastName}`} secondary={username} />
+			</ListItem>
 		));
 	};
 
 	return (
-		<div className="room-details">
+		<div className="room__details">
+			<Avatar className="avatar--large" src="https://i.pravatar.cc/300" />
 			<h1>{code}</h1>
 			<p>{description}</p>
-			<p>
-				<i>Created last {format(parseISO(createdAt), 'EEE MMM d h:m b')}</i>{' '}
-			</p>
-			<table>
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Username</th>
-					</tr>
-				</thead>
-				<tbody>{generateUserList()}</tbody>
-			</table>
-
-			<Button
-				onClick={() => openDialog('Leave')}
-				type="button"
-				className="login__button login__button--signin"
-				variant="contained"
-				color="secondary"
-				size="large"
-			>
-				Leave Room
-			</Button>
-
-			{users[0].username === loggedInUser.username && (
-				<Button
-					onClick={() => openDialog('Delete')}
-					type="button"
-					className="login__button login__button--signin"
-					variant="contained"
-					color="secondary"
-					size="large"
-				>
-					Delete Room
-				</Button>
-			)}
+			<List>{generateOptions()}</List>
+			<List>{generateUserList()}</List>
 
 			<ConfirmationDialog open={isOpen} onClose={handleModalClose} content={content} />
 		</div>

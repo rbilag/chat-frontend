@@ -55,31 +55,28 @@ function Login({ history }: LoginProps) {
 	);
 
 	return (
-		<div className="login">
-			<div className="login__area">
+		<div className="login auth__wrapper">
+			<div className="login__area area__wrapper">
+				<h1>REALTIME CHAT</h1>
+				<p>by Rose Bilag</p>
 				<form>
 					<input ref={usernameRef} type="text" placeholder="Username or Email" required />
 					<input ref={passwordRef} type="password" placeholder="Password" required />
 					<Button
 						onClick={proceed}
 						type="submit"
-						className="login__button login__button--submit"
 						variant="contained"
 						color="primary"
+						className="secondary"
 						size="large"
 					>
 						Proceed
 					</Button>
-					<Button
-						onClick={goToSignup}
-						type="button"
-						className="login__button login__button--signin"
-						variant="contained"
-						color="secondary"
-						size="large"
-					>
-						Register
-					</Button>
+					<p>
+						Don't have an account yet?<b className="signup__link" onClick={goToSignup}>
+							Register here
+						</b>
+					</p>
 				</form>
 				{errorMsg && <strong className="error__msg">{errorMsg}</strong>}
 			</div>

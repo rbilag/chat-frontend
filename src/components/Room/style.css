@@ -4,7 +4,7 @@
 	background-color: #ededed;
 }
 .chat--no-room {
-	flex-grow: 6;
+	flex-grow: 10;
 }
 .chat--no-room .chat__header {
 	height: 3rem;

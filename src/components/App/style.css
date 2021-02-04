@@ -1,3 +1,73 @@
 .app {
 	height: 100vh;
 }
+.MuiSvgIcon-root {
+	font-size: 1.25rem;
+}
+.MuiAvatar-root.avatar--large {
+	width: 6.5rem;
+	height: 6.5rem;
+}
+.MuiButton-contained {
+	background-color: #023047;
+	border-radius: 0.75rem;
+	font-size: 0.8rem;
+	letter-spacing: 0.15rem;
+	margin: 1.75rem auto 0;
+	padding: 0.75rem 5rem;
+}
+.MuiButton-contained:hover {
+	background-color: #002538;
+}
+.MuiButton-contained.secondary {
+	background-color: #219ebc;
+}
+.MuiButton-contained.secondary:hover {
+	background-color: #1e8fac;
+}
+input,
+textarea {
+	border-radius: 0.75rem;
+	padding: 0.8rem;
+	border: 1px solid #dadada;
+	outline: none;
+}
+.auth__wrapper {
+	height: 100vh;
+	display: flex;
+	place-items: center;
+	justify-content: center;
+	background-color: #023047;
+}
+.auth__wrapper .area__wrapper {
+	background-color: #f1faee;
+	text-align: center;
+	padding: 5rem 3rem;
+	width: 25rem;
+	min-height: 15rem;
+	border-radius: 0.75rem;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.auth__wrapper .area__wrapper > form {
+	display: flex;
+	flex-flow: row wrap;
+}
+.error__msg {
+	margin: 0 1rem;
+	font-size: 0.75rem;
+	color: #a90b0b;
+}
+
+.MuiPaper-root {
+	border-radius: 0.75rem;
+}
+.MuiDialogTitle-root,
+.MuiDialogContent-root {
+	background-color: #f1faee;
+}
+.MuiButton-textPrimary {
+	color: #002538;
+}
+.MuiSnackbarContent-root {
+	background-color: #219ebc;
+}

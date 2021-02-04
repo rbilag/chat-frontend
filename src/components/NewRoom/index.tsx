@@ -74,7 +74,7 @@ function NewRoom({ open, onClose }: NewRoomProps) {
 					<Button
 						onClick={proceed}
 						type="submit"
-						className="newRoom__button newRoom__button--submit"
+						className="secondary"
 						variant="contained"
 						color="primary"
 						size="large"

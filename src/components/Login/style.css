@@ -1,42 +1,30 @@
-.login {
-	height: 100vh;
-	display: flex;
-	place-items: center;
-	justify-content: center;
-	background-image: url('/src/assets/images/chat_bg_v2.jpg');
+.login__area h1 {
+	margin: 0;
 }
-.login__area {
-	background-color: #ededed;
-	padding: 3rem;
-	min-height: 15rem;
+.login__area > p {
+	margin: 0;
+	color: gray;
 }
 .login__area > form {
-	display: flex;
-	flex-flow: row wrap;
-	max-width: 40rem;
+	margin-top: 2rem;
 }
 .login__area > form input {
-	border-radius: 2rem;
-	padding: 0.8rem;
 	margin: 0.35rem 0;
-	border: 2px solid #e4e4e4;
-	outline: none;
-	width: 100%;
+	width: calc(100% - 2rem);
 }
-.login__button.MuiButton-contained {
-	letter-spacing: 0.1rem;
-	margin: 1.75rem auto 0;
-	padding: 0.75rem 5rem;
+.login__area form p {
+	margin: 1rem auto;
+	font-size: 0.9rem;
 }
-.login__button--submit.MuiButton-contained {
-	background-color: #098a90;
+.login__area .signup__link {
+	cursor: pointer;
+	margin: 0.25rem;
+	-webkit-transition: .25s ease-out;
+	-moz-transition: .25s ease-out;
+	-ms-transition: .25s ease-out;
+	-o-transition: .25s ease-out;
+	transition: .25s ease-out;
 }
-.login__button--submit.MuiButton-contained:hover {
-	background-color: #177a80;
-}
-.login__button--signin.MuiButton-contained {
-	background-color: #636363;
-}
-.login__button--signin.MuiButton-contained:hover {
-	background-color: #505050;
+.login__area .signup__link:hover {
+	color: #219ebc;
 }

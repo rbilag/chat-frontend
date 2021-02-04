@@ -1,0 +1,25 @@
+.chat__header {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.35rem;
+	border-bottom: 1px solid #cecece;
+	background-color: #fff;
+}
+.chat__headerInfo {
+	flex: 1;
+	padding-left: 1rem;
+}
+.chat__headerInfo > h3 {
+	font-weight: 500;
+	margin: 0;
+}
+.chat__headerInfo > p {
+	color: gray;
+	margin: 0 0 0.35rem;
+	font-size: 0.8rem;
+}
+.chat__headerIcons > .MuiIconButton-root {
+	margin-right: 0.5rem;
+}

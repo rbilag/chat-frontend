@@ -1,19 +1,11 @@
 .sidebar {
 	flex-grow: 1;
-}
-.sidebar__header {
-	padding: 0.35rem;
-	border-right: 1px solid lightgray;
-}
-.sidebar__headerIcons {
-	display: flex;
-	justify-content: flex-end;
-}
-.sidebar__headerIcons > .MuiIconButton-root {
-	margin-right: 0.5rem;
+	background-color: #023047;
+	color: #fff;
 }
 
-.sidebar__search {
+/* TODO revert if has search func */
+/* .sidebar__search {
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: center;
@@ -37,11 +29,12 @@
 	border: none;
 	outline-width: 0;
 	margin-left: 0.8rem;
+} */
+
+.sidebar__scrollbar {
+	height: 100%;
+	width: 100%;
 }
 .sidebar__rooms {
-	/* TODO revert if has search func */
-	/* height: calc(100vh - 7.58rem); */
 	height: calc(100vh - 3.67rem);
-	background-color: white;
-	overflow-y: scroll;
 }

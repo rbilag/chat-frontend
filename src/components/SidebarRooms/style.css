@@ -3,35 +3,37 @@
 	flex-flow: row nowrap;
 	align-items: center;
 	padding: 0.75rem 1rem;
-	border-bottom: 1px solid #f6f6f6;
+	cursor: pointer;
+	-webkit-transition: .25s ease-out;
+	-moz-transition: .25s ease-out;
+	-ms-transition: .25s ease-out;
+	-o-transition: .25s ease-out;
+	transition: .25s ease-out;
 }
 .sidebarRoom:hover {
-	background-color: #ebebeb;
+	background-color: #219ebc;
 }
 .sidebarRoom__details {
 	flex-grow: 2;
 	margin-left: 0.75rem;
-	cursor: pointer;
 }
 .sidebarRoom__details > h2,
 .sidebarRoom__details > p {
 	margin: 0;
 }
-
 .sidebarRoom__details > h2 {
 	font-size: 1.2rem;
+	font-weight: 500;
 }
-
 .sidebarRoom__details > p {
-	color: #8a8a8a;
+	color: #cecece;
 }
-
 .sidebarRoom__unread p {
 	padding: 0.25rem;
 	width: 1rem;
 	height: 1rem;
 	font-size: 0.75rem;
-	background: #599828;
+	background-color: #fb8500;
 	border-radius: 50%;
 	color: #fff;
 	text-align: center;

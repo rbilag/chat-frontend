@@ -9,6 +9,7 @@ import { SocketService } from '../../services/SocketService';
 import { USER_INITIAL_VALUE } from '../../constants';
 import { UserContext } from '../../context/UserContext';
 import { ChatContext } from '../../context/ChatContext';
+import { StylesProvider } from '@material-ui/core/styles';
 
 const routes = [
 	{ path: '/signup', component: SignUp },
@@ -23,18 +24,20 @@ function App() {
 	const userHook = useState(USER_INITIAL_VALUE);
 
 	return (
-		<UserContext.Provider value={userHook}>
-			<ChatContext.Provider value={chat}>
-				<div className="app">
-					<Router>
-						<Switch>
-							{routes.map(({ path, component }) => <Route key={path} path={path} component={component} exact />)}
-							<Route component={NotFound} />
-						</Switch>
-					</Router>
-				</div>
-			</ChatContext.Provider>
-		</UserContext.Provider>
+		<StylesProvider injectFirst>
+			<UserContext.Provider value={userHook}>
+				<ChatContext.Provider value={chat}>
+					<div className="app">
+						<Router>
+							<Switch>
+								{routes.map(({ path, component }) => <Route key={path} path={path} component={component} exact />)}
+								<Route component={NotFound} />
+							</Switch>
+						</Router>
+					</div>
+				</ChatContext.Provider>
+			</UserContext.Provider>
+		</StylesProvider>
 	);
 }
 

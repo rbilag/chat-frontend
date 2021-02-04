@@ -1,0 +1,22 @@
+.sidebar__header {
+	padding: 0.35rem;
+	display: flex;
+	justify-content: space-between;
+}
+.sidebar__headerAvatar {
+	display: flex;
+}
+.sidebar__headerAvatar > .MuiAvatar-root {
+	margin: auto;
+}
+.sidebar__headerAvatar p {
+	margin: auto 0.5rem;
+}
+.sidebar__headerIcons {
+	display: flex;
+	justify-content: flex-end;
+}
+.sidebar__headerIcons > .MuiIconButton-root {
+	color: #fff;
+	margin: 0.125rem 0.25rem 0.125rem 0;
+}

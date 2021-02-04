@@ -69,8 +69,8 @@ function SignUp({ history }: SignUpProps) {
 	};
 
 	return (
-		<div className="signup">
-			<div className="signup__area">
+		<div className="signup auth__wrapper">
+			<div className="signup__area area__wrapper">
 				<form>
 					<DebounceInput
 						debounceTimeout={300}
@@ -105,7 +105,7 @@ function SignUp({ history }: SignUpProps) {
 					<Button
 						onClick={proceed}
 						type="submit"
-						className="signup__button signup__button--submit"
+						className="secondary"
 						variant="contained"
 						color="primary"
 						size="large"
