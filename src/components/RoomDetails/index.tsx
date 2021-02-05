@@ -8,6 +8,7 @@ import PhotoIcon from '@material-ui/icons/Photo';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
+import GroupIcon from '@material-ui/icons/Group';
 import { RoomPopulated, User } from '../../types';
 
 export interface RoomDetailsProps {
@@ -72,9 +73,7 @@ function RoomDetails({ roomDetails, onRoomLeave }: RoomDetailsProps) {
 		return users.map(({ firstName, lastName, username }: User) => (
 			<ListItem key={username}>
 				<ListItemAvatar>
-					<Avatar>
-						<PersonIcon />
-					</Avatar>
+					<Avatar>{firstName && lastName ? firstName.charAt(0) + lastName.charAt(0) : <PersonIcon />}</Avatar>
 				</ListItemAvatar>
 				<ListItemText primary={`${firstName} ${lastName}`} secondary={username} />
 			</ListItem>
@@ -83,7 +82,9 @@ function RoomDetails({ roomDetails, onRoomLeave }: RoomDetailsProps) {
 
 	return (
 		<div className="room__details">
-			<Avatar className="avatar--large" src="https://i.pravatar.cc/300" />
+			<Avatar className="avatar--large">
+				<GroupIcon />
+			</Avatar>
 			<h1>{code}</h1>
 			<p>{description}</p>
 			<List>{generateOptions()}</List>

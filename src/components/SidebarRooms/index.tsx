@@ -1,5 +1,6 @@
 import { Avatar } from '@material-ui/core';
 import React from 'react';
+import GroupIcon from '@material-ui/icons/Group';
 import { RoomPopulated } from '../../types';
 import './style.css';
 
@@ -11,8 +12,10 @@ export interface SidebarRoomProps {
 const SidebarRoom = ({ room, onRoomClick }: SidebarRoomProps) => {
 	return (
 		<div className="sidebarRoom" onClick={() => onRoomClick(room.code)}>
-			<Avatar src="https://i.pravatar.cc/300" />
-			<div className="sidebarRoom__details">
+			<Avatar>
+				<GroupIcon />
+			</Avatar>
+			<div className={`sidebarRoom__details ${room.unread > 0 && 'sidebarRoom__details--unread'} `}>
 				<h2>{room.code}</h2>
 				<p>{room.description}</p>
 			</div>

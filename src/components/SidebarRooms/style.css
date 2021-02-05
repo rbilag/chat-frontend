@@ -23,7 +23,7 @@
 }
 .sidebarRoom__details > h2 {
 	font-size: 1.2rem;
-	font-weight: 500;
+	font-weight: 400;
 }
 .sidebarRoom__details > p {
 	color: #cecece;
@@ -38,4 +38,8 @@
 	color: #fff;
 	text-align: center;
 	margin: auto;
+}
+.sidebarRoom__details--unread > h2,
+.sidebarRoom__details--unread > p {
+	font-weight: 600;
 }

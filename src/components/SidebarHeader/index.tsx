@@ -2,6 +2,7 @@ import { Avatar, IconButton, Menu, MenuItem } from '@material-ui/core';
 import React from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import PersonIcon from '@material-ui/icons/Person';
 import { USER_INITIAL_VALUE } from '../../constants';
 import { useChat } from '../../context/ChatContext';
 import { useUser } from '../../context/UserContext';
@@ -37,8 +38,14 @@ function SidebarHeader({ history, onNewRoom }: SidebarHeaderProps) {
 	return (
 		<div className="sidebar__header">
 			<div className="sidebar__headerAvatar">
-				<Avatar src="https://i.pravatar.cc/300" />
-				<p>{loggedInUser.firstName + ' ' + loggedInUser.lastName}</p>
+				<Avatar>
+					{loggedInUser.firstName && loggedInUser.lastName ? (
+						loggedInUser.firstName.charAt(0) + loggedInUser.lastName.charAt(0)
+					) : (
+						<PersonIcon />
+					)}
+				</Avatar>
+				<p className="header__text">{loggedInUser.firstName + ' ' + loggedInUser.lastName}</p>
 			</div>
 			<div className="sidebar__headerIcons">
 				<IconButton onClick={onNewRoom}>

@@ -8,6 +8,10 @@
 	width: 6.5rem;
 	height: 6.5rem;
 }
+.MuiAvatar-colorDefault {
+	color: #fff;
+	background-color: #b3b3b3;
+}
 .MuiButton-contained {
 	background-color: #023047;
 	border-radius: 0.75rem;

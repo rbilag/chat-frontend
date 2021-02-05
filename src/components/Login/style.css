@@ -4,6 +4,7 @@
 .login__area > p {
 	margin: 0;
 	color: gray;
+	font-weight: 500;
 }
 .login__area > form {
 	margin-top: 2rem;
@@ -19,6 +20,7 @@
 .login__area .signup__link {
 	cursor: pointer;
 	margin: 0.25rem;
+	font-weight: 600;
 	-webkit-transition: .25s ease-out;
 	-moz-transition: .25s ease-out;
 	-ms-transition: .25s ease-out;

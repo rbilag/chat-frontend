@@ -153,7 +153,7 @@ const Room = ({ history }: RoomProps) => {
 				<div className="chat chat--no-room">
 					<div className="chat__header" />
 					<div className="chat__body">
-						<p>
+						<p className="header__text">
 							{rooms.length > 0 ? 'Click a room to start chatting!' : 'Create or Join a room to start a conversation!'}
 						</p>
 					</div>

@@ -11,6 +11,7 @@
 }
 .sidebar__headerAvatar p {
 	margin: auto 0.5rem;
+	font-weight: 400;
 }
 .sidebar__headerIcons {
 	display: flex;

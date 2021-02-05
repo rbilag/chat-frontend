@@ -5,6 +5,7 @@ import './style.css';
 import { MessagePopulated } from '../../types';
 import chatHttp from '../../services/Http';
 import { parseISO, differenceInCalendarDays, format, formatDistanceToNow } from 'date-fns';
+import PersonIcon from '@material-ui/icons/Person';
 import { useChat } from '../../context/ChatContext';
 import { useUser } from '../../context/UserContext';
 import ChatHeader from '../ChatHeader';
@@ -74,9 +75,15 @@ const Chat = ({ roomCode }: ChatProps) => {
 									key={i}
 								>
 									<div className="message__block">
-										<Avatar src="https://i.pravatar.cc/300" />
+										<Avatar>
+											{loggedInUser.firstName && loggedInUser.lastName ? (
+												loggedInUser.firstName.charAt(0) + loggedInUser.lastName.charAt(0)
+											) : (
+												<PersonIcon />
+											)}
+										</Avatar>
 										<p ref={lastMessage ? setRef : null} className="chat__message">
-											<span className="chat__person">
+											<span className="header__text chat__person">
 												{loggedInUser.username === user.username ? 'You' : user.username}
 											</span>
 											{content}

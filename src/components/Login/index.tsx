@@ -58,7 +58,7 @@ function Login({ history }: LoginProps) {
 		<div className="login auth__wrapper">
 			<div className="login__area area__wrapper">
 				<h1>REALTIME CHAT</h1>
-				<p>by Rose Bilag</p>
+				<p className="header__text">by Rose Bilag</p>
 				<form>
 					<input ref={usernameRef} type="text" placeholder="Username or Email" required />
 					<input ref={passwordRef} type="password" placeholder="Password" required />
@@ -73,7 +73,7 @@ function Login({ history }: LoginProps) {
 						Proceed
 					</Button>
 					<p>
-						Don't have an account yet?<b className="signup__link" onClick={goToSignup}>
+						Don't have an account yet?<b className="signup__link header__text" onClick={goToSignup}>
 							Register here
 						</b>
 					</p>

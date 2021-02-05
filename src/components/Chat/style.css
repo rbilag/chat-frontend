@@ -22,6 +22,13 @@
 	margin-right: 0.5rem;
 	margin-top: 0.2rem;
 }
+.message__block .chat__person {
+	font-size: small;
+	display: block;
+	margin-bottom: 0.25rem;
+	font-weight: 600;
+	letter-spacing: 0.03rem;
+}
 .chat__message {
 	position: relative;
 	width: fit-content;
@@ -31,12 +38,6 @@
 	border-radius: 0.75rem;
 	margin: 0;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-}
-.chat__person {
-	font-size: small;
-	font-weight: bold;
-	display: block;
-	margin-bottom: 0.25rem;
 }
 .chat__timestamp {
 	font-size: x-small;
