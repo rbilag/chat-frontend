@@ -28,9 +28,9 @@ const Chat = ({ roomCode }: ChatProps) => {
 	useEffect(
 		() => {
 			if (chatSocket === null) return;
-			const subscription = chatSocket.onMessage().subscribe((message: MessagePopulated) => {
-				if (message.roomCode === roomCode) {
-					setMessages((prevMsgs) => [ ...prevMsgs, message ]);
+			const subscription = chatSocket.onMessage().subscribe(({ newMsg, updatedRoom }) => {
+				if (newMsg.roomCode === roomCode) {
+					setMessages((prevMsgs) => [ ...prevMsgs, newMsg ]);
 				}
 			});
 			return () => {

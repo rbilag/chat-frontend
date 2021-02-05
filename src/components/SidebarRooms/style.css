@@ -27,6 +27,12 @@
 }
 .sidebarRoom__details > p {
 	color: #cecece;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	max-width: 13.75rem;
+	font-size: 0.9rem;
+	margin: 0.25rem 0;
 }
 .sidebarRoom__unread p {
 	padding: 0.25rem;

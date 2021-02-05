@@ -19,7 +19,7 @@ export interface RoomPopulated {
 	description: string;
 	lastActivity?: Date;
 	lastMessagePreview?: string;
-	unread: number;
+	unread?: number;
 	users: Array<User>;
 	createdAt: string;
 }
@@ -92,6 +92,10 @@ export interface JoinEventResp extends RoomEventResp {
 }
 export interface LeaveEventResp extends RoomEventResp {
 	leftRoom: string;
+}
+export interface MessageEventResp {
+	newMsg: MessagePopulated;
+	updatedRoom: RoomPopulated;
 }
 export interface MessagesResp extends BaseResponse {
 	data: {

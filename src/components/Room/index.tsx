@@ -11,7 +11,7 @@ import messageAudio from '../../assets/audio/message.mp3';
 import { useUser } from '../../context/UserContext';
 import { USER_INITIAL_VALUE } from '../../constants';
 import { useHistory } from 'react-router-dom';
-import { JoinEventResp, LeaveEventResp, MessagePopulated, RoomPopulated, User } from '../../types';
+import { JoinEventResp, LeaveEventResp, RoomPopulated, User } from '../../types';
 
 export interface RoomProps {
 	history: ReturnType<typeof useHistory>;
@@ -94,17 +94,21 @@ const Room = ({ history }: RoomProps) => {
 				if (roomCode === deletedRoom) setRoomCode((roomCode) => '');
 				setRooms((prevRooms: RoomPopulated[]) => prevRooms.filter((room: RoomPopulated) => room.code !== deletedRoom));
 			});
-			const messageSubscription = chatSocket.onMessage().subscribe((message: MessagePopulated) => {
-				if (message.roomCode !== roomCode) {
-					setRooms((prevRooms: RoomPopulated[]) => {
-						const newRooms = [ ...prevRooms ];
-						const userIndex = newRooms.findIndex((room: RoomPopulated) => room.code === message.roomCode);
-						if (userIndex >= 0)
-							newRooms[userIndex].unread = newRooms[userIndex].unread ? ++newRooms[userIndex].unread : 1;
-						return newRooms;
-					});
-					audio.play();
-				}
+			const messageSubscription = chatSocket.onMessage().subscribe(({ newMsg, updatedRoom }) => {
+				console.log(newMsg);
+				console.log(updatedRoom);
+				setRooms((prevRooms: RoomPopulated[]) => {
+					const newRooms = [ ...prevRooms ];
+					const userIndex = newRooms.findIndex((room: RoomPopulated) => room.code === newMsg.roomCode);
+					if (userIndex >= 0) {
+						if (updatedRoom) newRooms[userIndex] = updatedRoom;
+						if (newMsg.roomCode !== roomCode) {
+							newRooms[userIndex].unread = newRooms[userIndex].unread ? ++newRooms[userIndex].unread! : 1;
+							audio.play();
+						}
+					}
+					return newRooms;
+				});
 			});
 			return () => {
 				deleteSubscription.unsubscribe();

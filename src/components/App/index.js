@@ -22,7 +22,7 @@ const chat = new SocketService();
 
 function App() {
 	const userJSON = localStorage.getItem('chat-app-user');
-	const [ userDetails, setUserDetails ] = useState(userJSON != null ? JSON.parse(userJSON) : USER_INITIAL_VALUE);
+	const [ userDetails, setUserDetails ] = useState(userJSON !== null ? JSON.parse(userJSON) : USER_INITIAL_VALUE);
 
 	return (
 		<StylesProvider injectFirst>

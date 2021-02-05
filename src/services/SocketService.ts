@@ -1,4 +1,4 @@
-import { UserRoom, LeaveEventResp, JoinEventResp, ChatMessage, MessagePopulated } from './../types';
+import { UserRoom, LeaveEventResp, JoinEventResp, ChatMessage, MessageEventResp } from './../types';
 import { ChatEvent } from '../constants';
 import io from 'socket.io-client';
 import { fromEvent, Observable } from 'rxjs';
@@ -34,7 +34,7 @@ export class SocketService {
 		return fromEvent(this.socket, ChatEvent.ROOM_DELETE);
 	}
 
-	public onMessage(): Observable<MessagePopulated> {
+	public onMessage(): Observable<MessageEventResp> {
 		return fromEvent(this.socket, ChatEvent.MESSAGE);
 	}
 

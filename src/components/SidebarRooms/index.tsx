@@ -10,16 +10,17 @@ export interface SidebarRoomProps {
 }
 
 const SidebarRoom = ({ room, onRoomClick }: SidebarRoomProps) => {
+	console.log(room.unread);
 	return (
 		<div className="sidebarRoom" onClick={() => onRoomClick(room.code)}>
 			<Avatar>
 				<GroupIcon />
 			</Avatar>
-			<div className={`sidebarRoom__details ${room.unread > 0 && 'sidebarRoom__details--unread'} `}>
+			<div className={`sidebarRoom__details ${room.unread! > 0 && 'sidebarRoom__details--unread'} `}>
 				<h2>{room.code}</h2>
-				<p>{room.description}</p>
+				<p>{room.lastMessagePreview || room.description}</p>
 			</div>
-			{room.unread > 0 && (
+			{room.unread! > 0 && (
 				<div className="sidebarRoom__unread">
 					<p>{room.unread}</p>
 				</div>
