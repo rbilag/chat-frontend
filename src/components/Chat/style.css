@@ -2,10 +2,6 @@
 	flex-grow: 10;
 }
 .chat__body {
-	/* background-image: url('/src/assets/images/chat_bg_v2.jpg');
-	background-size: cover;
-	background-repeat: repeat;
-	background-position: center; */
 	background-color: #f1faee;
 	height: calc(100vh - 7.3rem);
 }
@@ -13,7 +9,7 @@
 	padding: 0 1rem 1.75rem;
 }
 .chat__block {
-	margin-top: 1.75rem;
+	margin-top: 1rem;
 }
 .message__block {
 	display: flex;

@@ -18,7 +18,7 @@ export interface ChatProps {
 const Chat = ({ roomCode }: ChatProps) => {
 	const [ messages, setMessages ] = useState([] as MessagePopulated[]);
 	const chatSocket = useChat();
-	const [ loggedInUser ] = useUser();
+	const { userDetails } = useUser();
 	const setRef = useCallback((node) => {
 		if (node) {
 			node.scrollIntoView({ smooth: true });
@@ -70,21 +70,21 @@ const Chat = ({ roomCode }: ChatProps) => {
 							const lastMessage = messages.length - 1 === i;
 							return (
 								<div
-									className={`chat__block ${loggedInUser.username === user.username &&
+									className={`chat__block ${userDetails.username === user.username &&
 										'chat__block--sender'} ${user.username === 'Chatbot' && 'chat__block--bot'}`}
 									key={i}
 								>
 									<div className="message__block">
 										<Avatar>
-											{loggedInUser.firstName && loggedInUser.lastName ? (
-												loggedInUser.firstName.charAt(0) + loggedInUser.lastName.charAt(0)
+											{user.firstName && user.lastName ? (
+												user.firstName.charAt(0) + user.lastName.charAt(0)
 											) : (
 												<PersonIcon />
 											)}
 										</Avatar>
 										<p ref={lastMessage ? setRef : null} className="chat__message">
 											<span className="header__text chat__person">
-												{loggedInUser.username === user.username ? 'You' : user.username}
+												{userDetails.username === user.username ? 'You' : user.username}
 											</span>
 											{content}
 										</p>
@@ -96,7 +96,7 @@ const Chat = ({ roomCode }: ChatProps) => {
 					</div>
 				</Scrollbar>
 			</div>
-			<ChatFooter roomCode={roomCode} loggedInUser={loggedInUser} />
+			<ChatFooter roomCode={roomCode} loggedInUser={userDetails} />
 		</div>
 	);
 };

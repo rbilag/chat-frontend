@@ -21,7 +21,7 @@ function RoomDetails({ roomDetails, onRoomLeave }: RoomDetailsProps) {
 	const [ isOpen, setIsOpen ] = useState(false);
 	const [ content, setContent ] = useState('');
 	const [ type, setType ] = useState('Leave');
-	const [ loggedInUser ] = useUser();
+	const { userDetails } = useUser();
 
 	const openDialog = (type: string) => {
 		setIsOpen(true);
@@ -59,7 +59,7 @@ function RoomDetails({ roomDetails, onRoomLeave }: RoomDetailsProps) {
 		];
 		return ROOM_OPTIONS.map(({ label, icon, adminOnly, action }, i) => {
 			return (
-				(!adminOnly || (adminOnly && users[0].username === loggedInUser.username)) && (
+				(!adminOnly || (adminOnly && users[0].username === userDetails.username)) && (
 					<ListItem key={i} button onClick={action}>
 						<ListItemIcon>{icon}</ListItemIcon>
 						<ListItemText primary={label} />

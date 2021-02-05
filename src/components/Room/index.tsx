@@ -20,7 +20,7 @@ export interface RoomProps {
 const audio = new Audio(messageAudio);
 
 const Room = ({ history }: RoomProps) => {
-	const [ loggedInUser, setLoggedInUser ] = useUser();
+	const { userDetails, setUserDetails } = useUser();
 	const [ openModal, setOpenModal ] = useState(false);
 	const [ openSnackbar, setOpenSnackbar ] = useState(false);
 	const snackbarMsg = useRef('');
@@ -39,19 +39,19 @@ const Room = ({ history }: RoomProps) => {
 					if (data.rooms[0]) {
 						setRoomCode(data.rooms[0].code);
 						data.rooms.forEach((room: RoomPopulated) => {
-							chatSocket.join({ name: loggedInUser.username || '', room: room.code });
+							chatSocket.join({ name: userDetails.username || '', room: room.code });
 						});
 					}
 				})
 				.catch(({ response }) => {
 					if (response.status === 401) {
 						localStorage.clear();
-						setLoggedInUser(USER_INITIAL_VALUE);
+						setUserDetails(USER_INITIAL_VALUE);
 						history.push('/login');
 					}
 				});
 		},
-		[ history, chatSocket, loggedInUser.username, setLoggedInUser ]
+		[ history, chatSocket, userDetails.username, setUserDetails ]
 	);
 
 	useEffect(

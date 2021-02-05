@@ -16,7 +16,7 @@ function NewRoom({ open, onClose }: NewRoomProps) {
 	const [ description, setDescription ] = useState('');
 	const [ roomCode, setRoomCode ] = useState('');
 	const chatSocket = useChat();
-	const [ loggedInUser ] = useUser();
+	const { userDetails } = useUser();
 
 	const handleClose = (val: null | RoomPopulated) => {
 		onClose(val);
@@ -28,7 +28,7 @@ function NewRoom({ open, onClose }: NewRoomProps) {
 			try {
 				let { data } = isNew ? await chatHttp.createRoom({ description }) : await chatHttp.joinRoom({ roomCode });
 				if (data) {
-					chatSocket.join({ name: loggedInUser.username, room: data.room.code }, true);
+					chatSocket.join({ name: userDetails.username, room: data.room.code }, true);
 					setisNew(true);
 					setDescription('');
 					setRoomCode('');

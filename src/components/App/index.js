@@ -21,11 +21,12 @@ const routes = [
 const chat = new SocketService();
 
 function App() {
-	const userHook = useState(USER_INITIAL_VALUE);
+	const userJSON = localStorage.getItem('chat-app-user');
+	const [ userDetails, setUserDetails ] = useState(userJSON != null ? JSON.parse(userJSON) : USER_INITIAL_VALUE);
 
 	return (
 		<StylesProvider injectFirst>
-			<UserContext.Provider value={userHook}>
+			<UserContext.Provider value={{ userDetails, setUserDetails }}>
 				<ChatContext.Provider value={chat}>
 					<div className="app">
 						<Router>

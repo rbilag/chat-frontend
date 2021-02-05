@@ -11,7 +11,6 @@ export interface GeneralSnackbarProps {
 
 function GeneralSnackbar({ message, open, onClose }: GeneralSnackbarProps) {
 	const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
-		console.log(reason);
 		if (reason === 'clickaway') {
 			return;
 		}

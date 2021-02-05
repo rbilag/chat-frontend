@@ -2,12 +2,12 @@ import { IconButton } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useChat } from '../../context/ChatContext';
 import SendIcon from '@material-ui/icons/Send';
-import { ChatMessage } from '../../types';
+import { ChatMessage, User } from '../../types';
 import './style.css';
 
 export interface ChatFooterProps {
 	roomCode: string;
-	loggedInUser: any;
+	loggedInUser: User;
 }
 function ChatFooter({ roomCode, loggedInUser }: ChatFooterProps) {
 	const [ input, setInput ] = useState('');

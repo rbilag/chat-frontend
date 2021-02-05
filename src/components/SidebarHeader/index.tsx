@@ -17,7 +17,7 @@ export interface SidebarHeaderProps {
 
 function SidebarHeader({ history, onNewRoom }: SidebarHeaderProps) {
 	const [ anchorEl, setAnchorEl ] = React.useState<null | HTMLElement>(null);
-	const [ loggedInUser, setLoggedInUser ] = useUser();
+	const { userDetails, setUserDetails } = useUser();
 	const chatSocket = useChat();
 
 	const onLogout = () => {
@@ -28,7 +28,7 @@ function SidebarHeader({ history, onNewRoom }: SidebarHeaderProps) {
 			.changeLoginStatus({ newValue: false })
 			.then((resp) => {
 				localStorage.clear();
-				setLoggedInUser(USER_INITIAL_VALUE);
+				setUserDetails(USER_INITIAL_VALUE);
 				history.push('/login');
 			})
 			.catch(({ response }) => {
@@ -39,13 +39,13 @@ function SidebarHeader({ history, onNewRoom }: SidebarHeaderProps) {
 		<div className="sidebar__header">
 			<div className="sidebar__headerAvatar">
 				<Avatar>
-					{loggedInUser.firstName && loggedInUser.lastName ? (
-						loggedInUser.firstName.charAt(0) + loggedInUser.lastName.charAt(0)
+					{userDetails.firstName && userDetails.lastName ? (
+						userDetails.firstName.charAt(0) + userDetails.lastName.charAt(0)
 					) : (
 						<PersonIcon />
 					)}
 				</Avatar>
-				<p className="header__text">{loggedInUser.firstName + ' ' + loggedInUser.lastName}</p>
+				<p className="header__text">{userDetails.firstName + ' ' + userDetails.lastName}</p>
 			</div>
 			<div className="sidebar__headerIcons">
 				<IconButton onClick={onNewRoom}>

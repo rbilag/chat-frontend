@@ -12,7 +12,7 @@ function Login({ history }: LoginProps) {
 	const usernameRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
 	const [ errorMsg, setErrorMsg ] = useState('');
-	const [ user, setUser ] = useUser();
+	const { userDetails, setUserDetails } = useUser();
 
 	const proceed = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
@@ -22,8 +22,8 @@ function Login({ history }: LoginProps) {
 				.then(({ authorization, data }) => {
 					setErrorMsg('');
 					localStorage.setItem('chat-app-auth', authorization);
-					console.log(data);
-					setUser(data.userDetails);
+					localStorage.setItem('chat-app-user', JSON.stringify(data.userDetails));
+					setUserDetails(data.userDetails);
 					history.push('/room');
 				})
 				.catch(({ response }) => {
@@ -46,12 +46,12 @@ function Login({ history }: LoginProps) {
 	useEffect(
 		() => {
 			const token = localStorage.getItem('chat-app-auth');
-			if (token && user.username) {
+			if (token && userDetails.username) {
 				chatHttp.changeLoginStatus({ newValue: true });
 				history.push('/room');
 			}
 		},
-		[ history, user ]
+		[ history, userDetails ]
 	);
 
 	return (
