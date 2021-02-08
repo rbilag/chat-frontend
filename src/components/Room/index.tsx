@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import './style.css';
 import Chat from '../Chat';
 import Sidebar from '../Sidebar';
@@ -11,7 +11,7 @@ import messageAudio from '../../assets/audio/message.mp3';
 import { useUser } from '../../context/UserContext';
 import { USER_INITIAL_VALUE } from '../../constants';
 import { useHistory } from 'react-router-dom';
-import { JoinEventResp, LeaveEventResp, RoomPopulated, User } from '../../types';
+import { JoinEventResp, LeaveEventResp, RoomPopulated, RoomUserPopulated } from '../../types';
 
 export interface RoomProps {
 	history: ReturnType<typeof useHistory>;
@@ -28,6 +28,18 @@ const Room = ({ history }: RoomProps) => {
 	const [ roomCode, setRoomCode ] = useState('');
 	const chatSocket = useChat();
 
+	const updateUnread = useCallback(
+		(room: RoomPopulated, willReset: boolean) => {
+			const userIndex = room.users.findIndex(
+				(roomUser: RoomUserPopulated) => roomUser.user.username === userDetails.username
+			);
+			room.users[userIndex].unread = willReset ? 0 : ++room.users[userIndex].unread;
+			chatSocket.updateUnread(room.users[userIndex].unread, room.code, userDetails.username);
+			return room;
+		},
+		[ chatSocket, userDetails.username ]
+	);
+
 	useEffect(
 		() => {
 			console.log('Initializing Socket Context..');
@@ -35,7 +47,10 @@ const Room = ({ history }: RoomProps) => {
 			chatHttp
 				.getRooms()
 				.then(({ data }) => {
-					setRooms(data.rooms);
+					setRooms(() => {
+						if (data.rooms[0]) data.rooms[0] = updateUnread(data.rooms[0], true);
+						return data.rooms;
+					});
 					if (data.rooms[0]) {
 						setRoomCode(data.rooms[0].code);
 						data.rooms.forEach((room: RoomPopulated) => {
@@ -51,7 +66,7 @@ const Room = ({ history }: RoomProps) => {
 					}
 				});
 		},
-		[ history, chatSocket, userDetails.username, setUserDetails ]
+		[ history, chatSocket, userDetails.username, setUserDetails, updateUnread ]
 	);
 
 	useEffect(
@@ -60,18 +75,18 @@ const Room = ({ history }: RoomProps) => {
 			const joinSubscription = chatSocket.onJoin().subscribe(({ userDetails, joinedRoom }: JoinEventResp) => {
 				setRooms((prevRooms: RoomPopulated[]) => {
 					const newRooms = [ ...prevRooms ];
-					const userIndex = newRooms.findIndex((room: RoomPopulated) => room.code === joinedRoom);
-					if (userIndex >= 0) newRooms[userIndex].users.push(userDetails);
+					const roomIndex = newRooms.findIndex((room: RoomPopulated) => room.code === joinedRoom);
+					if (roomIndex >= 0) newRooms[roomIndex].users.push({ user: userDetails, unread: 0 });
 					return newRooms;
 				});
 			});
 			const leaveSubscription = chatSocket.onLeave().subscribe(({ userDetails, leftRoom }: LeaveEventResp) => {
 				setRooms((prevRooms: RoomPopulated[]) => {
 					const newRooms = [ ...prevRooms ];
-					const userIndex = newRooms.findIndex((room: RoomPopulated) => room.code === leftRoom);
-					if (userIndex >= 0) {
-						newRooms[userIndex].users = newRooms[userIndex].users.filter(
-							(user: User) => user.username !== userDetails.username
+					const roomIndex = newRooms.findIndex((room: RoomPopulated) => room.code === leftRoom);
+					if (roomIndex >= 0) {
+						newRooms[roomIndex].users = newRooms[roomIndex].users.filter(
+							(roomUser: RoomUserPopulated) => roomUser.user.username !== userDetails.username
 						);
 					}
 					return newRooms;
@@ -95,15 +110,13 @@ const Room = ({ history }: RoomProps) => {
 				setRooms((prevRooms: RoomPopulated[]) => prevRooms.filter((room: RoomPopulated) => room.code !== deletedRoom));
 			});
 			const messageSubscription = chatSocket.onMessage().subscribe(({ newMsg, updatedRoom }) => {
-				console.log(newMsg);
-				console.log(updatedRoom);
 				setRooms((prevRooms: RoomPopulated[]) => {
 					const newRooms = [ ...prevRooms ];
-					const userIndex = newRooms.findIndex((room: RoomPopulated) => room.code === newMsg.roomCode);
-					if (userIndex >= 0) {
-						if (updatedRoom) newRooms[userIndex] = updatedRoom;
+					const roomIndex = newRooms.findIndex((room: RoomPopulated) => room.code === newMsg.roomCode);
+					if (roomIndex >= 0) {
+						if (updatedRoom) newRooms[roomIndex] = updatedRoom;
 						if (newMsg.roomCode !== roomCode) {
-							newRooms[userIndex].unread = newRooms[userIndex].unread ? ++newRooms[userIndex].unread! : 1;
+							newRooms[roomIndex] = updateUnread(newRooms[roomIndex], false);
 							audio.play();
 						}
 					}
@@ -115,7 +128,7 @@ const Room = ({ history }: RoomProps) => {
 				messageSubscription.unsubscribe();
 			};
 		},
-		[ chatSocket, roomCode ]
+		[ chatSocket, roomCode, userDetails.username, updateUnread ]
 	);
 
 	const getCurrentRoom = () => {
@@ -126,8 +139,8 @@ const Room = ({ history }: RoomProps) => {
 		setRoomCode(code);
 		setRooms((prevRooms: RoomPopulated[]) => {
 			const newRooms = [ ...prevRooms ];
-			const userIndex = newRooms.findIndex((room: RoomPopulated) => room.code === code);
-			newRooms[userIndex].unread = 0;
+			const roomIndex = newRooms.findIndex((room: RoomPopulated) => room.code === code);
+			newRooms[roomIndex] = updateUnread(newRooms[roomIndex], true);
 			return newRooms;
 		});
 	};

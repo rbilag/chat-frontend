@@ -14,13 +14,17 @@ export interface MessagePopulated {
 	createdAt: string;
 }
 
+export interface RoomUserPopulated {
+	user: User;
+	unread: number;
+}
+
 export interface RoomPopulated {
 	code: string;
 	description: string;
 	lastActivity?: Date;
 	lastMessagePreview?: string;
-	unread?: number;
-	users: Array<User>;
+	users: Array<RoomUserPopulated>;
 	createdAt: string;
 }
 

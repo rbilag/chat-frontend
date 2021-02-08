@@ -3,6 +3,7 @@ export enum ChatEvent {
 	DISCONNECT = 'disconnect',
 	JOIN = 'join',
 	MESSAGE = 'message',
+	UNREAD = 'unread',
 	LEAVE = 'leave',
 	ROOM_DELETE = 'room delete'
 }

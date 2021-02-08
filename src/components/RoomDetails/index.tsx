@@ -9,7 +9,7 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
-import { RoomPopulated, User } from '../../types';
+import { RoomPopulated, RoomUserPopulated } from '../../types';
 
 export interface RoomDetailsProps {
 	roomDetails: RoomPopulated;
@@ -59,7 +59,7 @@ function RoomDetails({ roomDetails, onRoomLeave }: RoomDetailsProps) {
 		];
 		return ROOM_OPTIONS.map(({ label, icon, adminOnly, action }, i) => {
 			return (
-				(!adminOnly || (adminOnly && users[0].username === userDetails.username)) && (
+				(!adminOnly || (adminOnly && users[0].user.username === userDetails.username)) && (
 					<ListItem key={i} button onClick={action}>
 						<ListItemIcon>{icon}</ListItemIcon>
 						<ListItemText primary={label} />
@@ -70,14 +70,17 @@ function RoomDetails({ roomDetails, onRoomLeave }: RoomDetailsProps) {
 	};
 
 	const generateUserList = () => {
-		return users.map(({ firstName, lastName, username }: User) => (
-			<ListItem key={username}>
-				<ListItemAvatar>
-					<Avatar>{firstName && lastName ? firstName.charAt(0) + lastName.charAt(0) : <PersonIcon />}</Avatar>
-				</ListItemAvatar>
-				<ListItemText primary={`${firstName} ${lastName}`} secondary={username} />
-			</ListItem>
-		));
+		return users.map(({ user }: RoomUserPopulated) => {
+			const { username, firstName, lastName } = user;
+			return (
+				<ListItem key={username}>
+					<ListItemAvatar>
+						<Avatar>{firstName && lastName ? firstName.charAt(0) + lastName.charAt(0) : <PersonIcon />}</Avatar>
+					</ListItemAvatar>
+					<ListItemText primary={`${firstName} ${lastName}`} secondary={username} />
+				</ListItem>
+			);
+		});
 	};
 
 	return (
