@@ -8,7 +8,7 @@ export class SocketService {
 
 	public init(): SocketService {
 		console.log('Initializing Socket Service');
-		this.socket = io('localhost:8080');
+		this.socket = io(process.env.REACT_APP_SERVER_URL!);
 		return this;
 	}
 
