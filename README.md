@@ -21,27 +21,25 @@
 
 
 
-<details open="open">
-  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-        <li><a href="#credentials">Credentials</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
+<h2 style="display: inline-block">Table of Contents</h2>
+<ol>
+  <li>
+    <a href="#about-the-project">About The Project</a>
+    <ul>
+      <li><a href="#built-with">Built With</a></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#getting-started">Getting Started</a>
+    <ul>
+      <li><a href="#prerequisites">Prerequisites</a></li>
+      <li><a href="#installation">Installation</a></li>
+      <li><a href="#credentials">Credentials</a></li>
+    </ul>
+  </li>
+  <li><a href="#usage">Usage</a></li>
+  <li><a href="#contact">Contact</a></li>
+</ol>
 
 
 
@@ -102,12 +100,15 @@ Password: 123password
 
 ## Usage
 **Creating a Room**
+
 ![](createRoom.png)
 1. Click the message icon on the sidebar header.
 2. Inputing the necessary fields.
 3. Share the randomly-generated room code with people you want to invite in the room.
 
+
 **Joining a Room**
+
 ![](joinRoom.png)
 1. Obtain the room code from the room creator.
 2. Click the message icon on the sidebar header.
