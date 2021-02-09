@@ -19,14 +19,20 @@ const SidebarRoom = ({ room, userDetails, onRoomClick }: SidebarRoomProps) => {
 			<Avatar>
 				<GroupIcon />
 			</Avatar>
-			<div className={`sidebarRoom__details ${room.users[userIndex].unread > 0 && 'sidebarRoom__details--unread'} `}>
-				<h2>{room.code}</h2>
-				<p>{room.lastMessagePreview || room.description}</p>
-			</div>
-			{room.users[userIndex].unread > 0 && (
-				<div className="sidebarRoom__unread">
-					<p>{room.users[userIndex].unread}</p>
-				</div>
+			{userIndex >= 0 && (
+				<React.Fragment>
+					<div
+						className={`sidebarRoom__details ${room.users[userIndex].unread > 0 && 'sidebarRoom__details--unread'} `}
+					>
+						<h2>{room.code}</h2>
+						<p>{room.lastMessagePreview || room.description}</p>
+					</div>
+					{room.users[userIndex].unread > 0 && (
+						<div className="sidebarRoom__unread">
+							<p>{room.users[userIndex].unread}</p>
+						</div>
+					)}
+				</React.Fragment>
 			)}
 		</div>
 	);
