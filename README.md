@@ -33,7 +33,6 @@
     <ul>
       <li><a href="#prerequisites">Prerequisites</a></li>
       <li><a href="#installation">Installation</a></li>
-      <li><a href="#credentials">Credentials</a></li>
     </ul>
   </li>
   <li><a href="#usage">Usage</a></li>
@@ -84,26 +83,22 @@ Install latest version of npm
    ```
 
 
-### Credentials
-You can use any of the provided usernames. They all have the same password.
-
-Usernames:
-<ul>
-    <li>rosebilag</li>
-    <li>testuser</li>
-    <li>sampleuser</li>
-</ul>
-Password: 123password
-
-
 
 
 ## Usage
+**Creating an Account**
+
+![](register.png)
+1. In the login page, click 'Register here'.
+2. Input the necessary fields. Don't worry. It won't take long.
+3. You'll be redirected to the login page. Enter your newly created credentials.
+
+
 **Creating a Room**
 
 ![](createRoom.png)
 1. Click the message icon on the sidebar header.
-2. Inputing the necessary fields.
+2. Input the necessary fields and proceed.
 3. Share the randomly-generated room code with people you want to invite in the room.
 
 
