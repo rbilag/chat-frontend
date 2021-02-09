@@ -1,70 +1,121 @@
-# Getting Started with Create React App
+[![Netlify Status][netlify-shield]][netlify-url]
+[![Issues][issues-shield]][issues-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+<br />
+<p align="center">
+  <h3 align="center">Realtime Chat App</h3>
+  <p align="center">
+    A web-based messaging application that delivers messages instantaneously.
+    <br />
+    <a href="https://rose-chat-client.netlify.app"><strong>View Demo »</strong></a>
+    <br /><br />
+    <a href="https://github.com/rosebilag/chat-frontend/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/rosebilag/chat-frontend/issues">Request Feature</a>
+  </p>
+</p>
 
-In the project directory, you can run:
 
-### `npm start`
+<details open="open">
+  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#credentials">Credentials</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## About The Project
+[![App Screen Shot][app-screenshot]](chat.png)
 
-### `npm test`
+### Built With
+* **[React](https://reactjs.org/)**
+* **[Socket.io](https://socket.io/)**
+* **[Typescript](https://www.typescriptlang.org/)**
+* [Node.js](https://nodejs.org/en/)
+* [MongoDB](https://www.mongodb.com/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## Getting Started
+To get a local copy up and running follow these simple steps.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Prerequisites
+Install latest version of npm
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Installation
+1. Clone the project
+   ```sh
+   git clone https://github.com/rosebilag/chat-frontend.git
+   ```
+2. Go to project directory and Install NPM packages
+   ```sh
+   npm install
+   ```
+3. Create .env file with the ff. content
+   ```sh
+   REACT_APP_SERVER_URL=https://rose-chat-backend.herokuapp.com
+   ```
+4. Start the application
+   ```sh
+   npm start
+   ```
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Credentials
+You can use any of the provided usernames. They all have the same password.
+Usernames:
+<ul>
+    <li>rosebilag</li>
+    <li>testuser</li>
+    <li>sampleuser</li>
+</ul>
+Password: 123password
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Usage
+**Creating a Room**
+[![Create Room Screen Shot][create-screenshot]](createRoom.png)
+1. Click the message icon on the sidebar header.
+2. Inputing the necessary fields.
+3. Share the randomly-generated room code with people you want to invite in the room.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+**Joining a Room**
+[![Join Room Screen Shot][join-screenshot]](joinRoom.png)
+1. Obtain the room code from the room creator.
+2. Click the message icon on the sidebar header.
+3. Click 'Join Room' tab option.
+4. Input room code and proceed.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contact
+Rose Bilag - [LinkedIn](https://linkedin.com/rosejoybilag) - hello@rosebilag.com
+Project Link: [https://github.com/rosebilag/chat-frontend](https://github.com/rosebilag/chat-frontend)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[netlify-shield]: https://api.netlify.com/api/v1/badges/24e36167-88a7-4e1e-93f5-0986aa1c1b7d/deploy-status
+[netlify-url]:https://app.netlify.com/sites/rose-chat-client/deploys
+[issues-shield]: https://img.shields.io/github/issues/rosebilag/repo.svg?style=for-the-badge
+[issues-url]: https://github.com/rosebilag/repo/issues
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/rosebilag
