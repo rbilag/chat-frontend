@@ -5,10 +5,11 @@
 
 <br />
 <p align="center">
-  <h3 align="center">Realtime Chat App</h3>
+  <h1 align="center">Realtime Chat App</h1>
+  <img src="chat.png" alt="Product Screenshot">
   <p align="center">
     A web-based messaging application that delivers messages instantaneously.
-    <br />
+    <br /><br />
     <a href="https://rose-chat-client.netlify.app"><strong>View Demo »</strong></a>
     <br /><br />
     <a href="https://github.com/rosebilag/chat-frontend/issues">Report Bug</a>
@@ -16,6 +17,8 @@
     <a href="https://github.com/rosebilag/chat-frontend/issues">Request Feature</a>
   </p>
 </p>
+
+
 
 
 <details open="open">
@@ -41,8 +44,9 @@
 </details>
 
 
+
+
 ## About The Project
-[![App Screen Shot][app-screenshot]](chat.png)
 
 ### Built With
 * **[React](https://reactjs.org/)**
@@ -84,6 +88,7 @@ Install latest version of npm
 
 ### Credentials
 You can use any of the provided usernames. They all have the same password.
+
 Usernames:
 <ul>
     <li>rosebilag</li>
@@ -93,15 +98,17 @@ Usernames:
 Password: 123password
 
 
+
+
 ## Usage
 **Creating a Room**
-[![Create Room Screen Shot][create-screenshot]](createRoom.png)
+![](createRoom.png)
 1. Click the message icon on the sidebar header.
 2. Inputing the necessary fields.
 3. Share the randomly-generated room code with people you want to invite in the room.
 
 **Joining a Room**
-[![Join Room Screen Shot][join-screenshot]](joinRoom.png)
+![](joinRoom.png)
 1. Obtain the room code from the room creator.
 2. Click the message icon on the sidebar header.
 3. Click 'Join Room' tab option.
@@ -110,12 +117,13 @@ Password: 123password
 
 ## Contact
 Rose Bilag - [LinkedIn](https://linkedin.com/rosejoybilag) - hello@rosebilag.com
+
 Project Link: [https://github.com/rosebilag/chat-frontend](https://github.com/rosebilag/chat-frontend)
 
 
-[netlify-shield]: https://api.netlify.com/api/v1/badges/24e36167-88a7-4e1e-93f5-0986aa1c1b7d/deploy-status
+[netlify-shield]: https://img.shields.io/netlify/24e36167-88a7-4e1e-93f5-0986aa1c1b7d?style=for-the-badge
 [netlify-url]:https://app.netlify.com/sites/rose-chat-client/deploys
 [issues-shield]: https://img.shields.io/github/issues/rosebilag/repo.svg?style=for-the-badge
-[issues-url]: https://github.com/rosebilag/repo/issues
+[issues-url]: https://github.com/rosebilag/chat-frontend/issues
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/rosebilag
